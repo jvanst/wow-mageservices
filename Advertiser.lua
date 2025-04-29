@@ -6,7 +6,7 @@ local Advertiser = {}
 
 -- Advertisement messages
 Advertiser.Messages = {
-    general = "Mage 55 Water & Food at SW Fountain • Open Trade • Tips appreciated! • Selling ports for 1g",
+    general = "Mage 55 Water & Food at SW Fountain • Open Trade • Tips appreciated • Whisper 'inv' to buy port for 1g",
 }
 
 -- Cooldowns

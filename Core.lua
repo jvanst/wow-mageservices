@@ -127,8 +127,26 @@ frame:SetScript("OnEvent", function(self, event, ...)
  
         if string.lower(message) == "inv" then
             InviteUnit(playerName)
+            -- Ask the player where they'd like to port to
+            SendChatMessage("Where would you like to port to?", "WHISPER", nil, playerName)
         else
-            HandleMessage(message, playerName)
+            -- Check if this is a response to our destination question
+            local lowerMessage = string.lower(message)
+            local foundDestination = Destinations.FindInMessage(message)
+            
+            if foundDestination then
+                print("Player " .. playerName .. " wants to port to " .. foundDestination)
+                Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
+                TradePortal.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), TradePortal.PURCHASE_STATUS.PENDING_TRADE)
+                
+                -- If they're not already in the group, invite them
+                if not UnitInParty(playerName) then
+                    InviteUnit(playerName)
+                end
+            else
+                -- Handle other messages as before
+                HandleMessage(message, playerName)
+            end
         end
 
     elseif event == "GROUP_ROSTER_UPDATE" then
