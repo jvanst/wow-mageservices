@@ -57,11 +57,6 @@ function Destinations.AddPlayerDestination(playerName, destination)
 end
 
 function Destinations.GetPlayerDestination(playerName)
-    -- Print all player destinations for debugging
-    for name, dest in pairs(playerDestinations) do
-        print("Player: " .. name .. ", Destination: " .. dest)
-    end
-
     if not playerName then
         return nil
     end
