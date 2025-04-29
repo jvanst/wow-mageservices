@@ -188,6 +188,13 @@ frame:SetScript("OnEvent", function(self, event, ...)
             local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
             if destination then
                 Spells.CastPortal(destination)
+
+                -- Leave the party after 45 seconds if the player is alone
+                C_Timer.NewTimer(45, function()
+                    if GetNumGroupMembers() == 1 then
+                        LeaveParty()
+                    end
+                end)
             else
                 print("Error: No destination set for player " .. player)
             end
