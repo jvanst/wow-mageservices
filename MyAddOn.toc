@@ -1,0 +1,18 @@
+## Interface: 11403
+## Title: MyAddOn
+## Notes: Scans chat for 'port' and automates teleportation.
+## Author: James
+## Version: 1.0
+
+Init.lua
+ContainerUI.lua
+Advertiser.lua
+Destinations.lua
+Blacklist.lua
+Utilities.lua
+TradeFood.lua
+TradePortal.lua
+TradeProximityMonitor.lua
+TradeTimeoutMonitor.lua
+Spells.lua
+Core.lua
