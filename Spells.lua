@@ -111,6 +111,17 @@ function Spells.UpdateConjureButton()
     local waterThreshold = 700
     local foodThreshold = 300
     
+    -- Check mana percentage
+    local currentMana = UnitPower("player", Enum.PowerType.Mana)
+    local maxMana = UnitPowerMax("player", Enum.PowerType.Mana)
+    local manaPercentage = (currentMana / maxMana) * 100
+    
+    -- Hide button if mana is below 25%
+    if manaPercentage < 25 then
+        Spells.ConjureButton:Hide()
+        return
+    end
+    
     -- Count current items
     local waterCount = Spells.CountItemsInBags(MyAddOn.TradeFood.Items.water)
     local foodCount = Spells.CountItemsInBags(MyAddOn.TradeFood.Items.food)
@@ -163,12 +174,16 @@ Spells.ConjureButton:SetScript("PostClick", function(self)
     end)
 end)
 
--- Create a frame to update the button state when bags change
+-- Create a frame to update the button state when bags change or mana changes
 local bagUpdateFrame = CreateFrame("Frame")
 bagUpdateFrame:RegisterEvent("BAG_UPDATE")
 bagUpdateFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-bagUpdateFrame:SetScript("OnEvent", function(self, event)
-    Spells.UpdateConjureButton()
+bagUpdateFrame:RegisterEvent("UNIT_POWER_UPDATE")
+bagUpdateFrame:SetScript("OnEvent", function(self, event, unit)
+    -- Only update if it's the player's power that changed
+    if event ~= "UNIT_POWER_UPDATE" or (event == "UNIT_POWER_UPDATE" and unit == "player") then
+        Spells.UpdateConjureButton()
+    end
 end)
 
 -- Initialize the button
