@@ -150,6 +150,10 @@ frame:SetScript("OnEvent", function(self, event, ...)
         end
 
     elseif event == "GROUP_ROSTER_UPDATE" then
+        -- Set raid icon (star) on yourself
+        SetRaidTarget("player", 1)  -- 1 = Yellow Star
+        
+        -- Continue with your existing code
         TradeProximityMonitor.Start()
 
     elseif event == "TRADE_SHOW" then
