@@ -38,21 +38,38 @@ function Spells.CastPortal(destination)
     Spells.CastButton:SetAttribute("spell", spellName)
     Spells.CastButton:SetText("Cast Portal")
     
-    -- Notify the user they need to click the button
-    print("|cFF00FF00Click the button to cast " .. spellName .. "|r")
-    
-    -- Show the button
-    Spells.CastButton:Show()
-    
-    -- Hide the button after 15 seconds if not clicked
-    if Spells.HideTimer then
-        Spells.HideTimer:Cancel()
+    -- Check if player is currently casting a spell
+    local function ShowPortalButton()
+        if UnitCastingInfo("player") then
+            -- Player is casting, wait and try again in 0.5 seconds
+            C_Timer.After(0.5, ShowPortalButton)
+            return
+        end
+        
+        -- Hide conjure buttons while portal button is visible
+        Spells.ConjureButton:Hide()
+        
+        -- Notify the user they need to click the button
+        print("|cFF00FF00Click the button to cast " .. spellName .. "|r")
+        
+        -- Show the button
+        Spells.CastButton:Show()
+        
+        -- Hide the button after 15 seconds if not clicked
+        if Spells.HideTimer then
+            Spells.HideTimer:Cancel()
+        end
+        
+        Spells.HideTimer = C_Timer.NewTimer(15, function()
+            Spells.CastButton:Hide()
+            print("Portal cast button hidden due to timeout")
+            -- Show conjure buttons again
+            Spells.UpdateConjureButton()
+        end)
     end
     
-    Spells.HideTimer = C_Timer.NewTimer(15, function()
-        Spells.CastButton:Hide()
-        print("Portal cast button hidden due to timeout")
-    end)
+    -- Start the check process
+    ShowPortalButton()
     
     -- Add a handler to hide the button after it's clicked
     Spells.CastButton:SetScript("PostClick", function()
@@ -61,6 +78,9 @@ function Spells.CastPortal(destination)
             Spells.HideTimer = nil
         end
         Spells.CastButton:Hide()
+        
+        -- Show conjure buttons again
+        Spells.UpdateConjureButton()
     end)
     
     return true

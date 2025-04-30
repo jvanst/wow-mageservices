@@ -6,12 +6,12 @@ local TradeFood = {}
 -- Configuration for class-specific food and water distribution
 -- Format: [CLASS] = { water = X, food = Y }
 TradeFood.ClassConfig = {
-    ["WARRIOR"] = { water = 1, food = 3 },
-    ["PALADIN"] = { water = 3, food = 3 },
+    ["WARRIOR"] = { water = 1, food = 4 },
+    ["PALADIN"] = { water = 5, food = 1 },
     ["HUNTER"] = { water = 4, food = 2 },
     ["ROGUE"] = { water = 1, food = 4 },
-    ["PRIEST"] = { water = 4, food = 1 },
-    ["SHAMAN"] = { water = 4, food = 1 },
+    ["PRIEST"] = { water = 5, food = 1 },
+    ["SHAMAN"] = { water = 5, food = 1 },
     ["MAGE"] = { water = 3, food = 3 }, -- Mages can create their own
     ["WARLOCK"] = { water = 3, food = 3 },
     ["DRUID"] = { water = 4, food = 2 },
