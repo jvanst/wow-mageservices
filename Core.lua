@@ -91,6 +91,72 @@ local function HandleMessage(message, playerName)
     end
 end
 
+-- Function to display a summary of the trade
+local function ShowTradeSummary(player)
+    -- Get traded items from player to target
+    local givenItems = {}
+    local waterCount = 0
+    local foodCount = 0
+    
+    -- Check each trade slot (1-7 are item slots)
+    for i = 1, 7 do
+        local name, texture, quantity, quality, isUsable, enchantment = GetTradePlayerItemInfo(i)
+        if name then
+            if name == TradeFood.Items.water then
+                waterCount = waterCount + (quantity or 1)
+            elseif name == TradeFood.Items.food then
+                foodCount = foodCount + (quantity or 1)
+            end
+            
+            table.insert(givenItems, {name = name, quantity = quantity or 1})
+        end
+    end
+    
+    -- Get gold amount from target
+    local goldReceived = GetTargetTradeMoney()
+    local gold = math.floor(goldReceived / 10000)
+    local silver = math.floor((goldReceived % 10000) / 100)
+    local copper = goldReceived % 100
+    
+    -- Format gold string
+    local goldString = ""
+    if gold > 0 then
+        goldString = gold .. "g "
+    end
+    if silver > 0 or gold > 0 then
+        goldString = goldString .. silver .. "s "
+    end
+    goldString = goldString .. copper .. "c"
+    
+    -- Print summary
+    print("|cFF33FF99Trade Summary with|r |cFFFFFF00" .. player .. "|r:")
+    
+    if #givenItems > 0 then
+        print("  |cFF00FF00Items given:|r")
+        for _, item in ipairs(givenItems) do
+            print("    - " .. item.quantity .. "x " .. item.name)
+        end
+    end
+    
+    if goldReceived > 0 then
+        print("  |cFFFFD700Received:|r " .. goldString)
+    end
+    
+    if waterCount > 0 or foodCount > 0 then
+        local tradeType = "water/food"
+        print("|cFF33FF99Trade completed:|r " .. waterCount .. " water and " .. foodCount .. " food traded to " .. player)
+    elseif goldReceived >= REQUIRED_GOLD_AMOUNT then
+        local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
+        if destination then
+            print("|cFF33FF99Portal sale:|r " .. goldString .. " received for portal to " .. destination)
+        else
+            print("|cFF33FF99Trade completed:|r " .. goldString .. " received")
+        end
+    else
+        print("|cFF33FF99Trade completed with|r " .. player)
+    end
+end
+
 -- Update the TRADE_SHOW event to handle water and food trades
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
@@ -204,8 +270,10 @@ frame:SetScript("OnEvent", function(self, event, ...)
             TradeTimeoutMonitor.Stop()
 
             TradePortal.SetPlayerPortalPurchaseStatus(Utils.StripRealm(player), TradePortal.PURCHASE_STATUS.PAID)
-            print("Trade accepted with " .. player .. ". Player marked as paid")
-
+            
+            -- Show trade summary
+            ShowTradeSummary(player)
+            
             -- Cast the portal spell
             local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
             if destination then
