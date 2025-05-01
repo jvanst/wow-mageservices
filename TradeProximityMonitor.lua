@@ -1,15 +1,25 @@
+------------------------------------------
+-- Trade Proximity Monitor
+------------------------------------------
 -- This module monitors the proximity of players in a group and initiates trade if they are within range.
 -- It uses the C_Timer API to create a ticker that checks for players in trade range every 2 seconds.
 
 local MyAddOn = MYADDON
-local TradePortal = MyAddOn.TradePortal
+local Trade = MyAddOn.Trade
 
--- Create the Utils module
+------------------------------------------
+-- Create the module
+------------------------------------------
 local TradeProximityMonitor = {}
 
 -- Add a variable to track the active ticker
 local proximityTicker = nil
 
+------------------------------------------
+-- Functions
+------------------------------------------
+
+-- Function to start monitoring players in proximity
 function TradeProximityMonitor.Start()
     print("Starting Trade Proximity Monitor...")
 
@@ -38,12 +48,12 @@ function TradeProximityMonitor.Start()
             if UnitExists(unit) then
                 local unitName = UnitName(unit)
                 -- Check if the unit is in trade range and has a pending purchase status
-                if TradePortal.GetPlayerPortalPurchaseStatus(unitName) == TradePortal.PURCHASE_STATUS.PENDING_TRADE then                    
+                if Trade.GetPlayerPortalPurchaseStatus(unitName) == Trade.PURCHASE_STATUS.PENDING_TRADE then                    
                     if CheckInteractDistance(unit, 2) then
                         print("Player " .. unitName .. " is in trade range, initiating trade.")
                         InitiateTrade(unit)
                         -- Set the player's purchase status to pending payment
-                        TradePortal.SetPlayerPortalPurchaseStatus(unitName, TradePortal.PURCHASE_STATUS.PENDING)
+                        Trade.SetPlayerPortalPurchaseStatus(unitName, Trade.PURCHASE_STATUS.PENDING)
                         break
                     end
                 end
@@ -52,5 +62,7 @@ function TradeProximityMonitor.Start()
     end, 0) -- Zero repeat count means it runs until manually canceled
 end
 
+------------------------------------------
 -- Register the module in the addon namespace
+------------------------------------------
 MyAddOn.TradeProximityMonitor = TradeProximityMonitor

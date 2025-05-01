@@ -1,9 +1,17 @@
+------------------------------------------
+-- Advertiser Module
+------------------------------------------
 local MyAddOn = MYADDON
 local ContainerUI = MyAddOn.ContainerUI
 
+------------------------------------------
 -- Create the Advertiser module
+------------------------------------------
 local Advertiser = {}
 
+------------------------------------------
+-- Configuration
+------------------------------------------
 -- Advertisement messages
 Advertiser.Messages = {
     general = "Mage 55 Water & Food at SW Fountain • Open Trade • Tips appreciated • Whisper 'inv' to buy port for 1g",
@@ -12,6 +20,10 @@ Advertiser.Messages = {
 -- Cooldowns
 Advertiser.lastMessageTime = 0
 Advertiser.COOLDOWN_SECONDS = 60 -- 1 minute cooldown
+
+------------------------------------------
+-- Advertising Functions
+------------------------------------------
 
 -- Function to send advertisements
 function Advertiser.SendMessage(messageType)
@@ -48,6 +60,10 @@ function Advertiser.SendMessage(messageType)
     end
 end
 
+------------------------------------------
+-- UI Elements
+------------------------------------------
+
 -- Create the advertise button
 function Advertiser.CreateButton()
     -- Create the Advertise button within the Portal Caster container
@@ -83,6 +99,10 @@ function Advertiser.CreateButton()
     Advertiser.Button = AdvertiseButton
 end
 
+------------------------------------------
+-- Initialization
+------------------------------------------
+
 -- Initialize the Advertiser
 function Advertiser.Init()
     Advertiser.CreateButton()
@@ -92,5 +112,7 @@ end
 -- Call initialization
 Advertiser.Init()
 
+------------------------------------------
 -- Register the module in the addon namespace
+------------------------------------------
 MyAddOn.Advertiser = Advertiser

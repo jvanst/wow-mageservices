@@ -1,19 +1,25 @@
--- Reference the namespace and modules
+------------------------------------------
+-- Core Module
+------------------------------------------
 local MyAddOn = MYADDON
 local Destinations = MyAddOn.Destinations
 local Blacklist = MyAddOn.Blacklist
 local Utils = MyAddOn.Utils
-local TradePortal = MyAddOn.TradePortal
-local TradeFood = MyAddOn.TradeFood
+local Trade = MyAddOn.Trade
 local TradeProximityMonitor = MyAddOn.TradeProximityMonitor
 local TradeTimeoutMonitor = MyAddOn.TradeTimeoutMonitor
 local Spells = MyAddOn.Spells
 
--- Add enabled state variable
+------------------------------------------
+-- Addon Configuration
+------------------------------------------
 local addonEnabled = true -- Default to enabled
 
 local frame = CreateFrame("Frame")
 
+------------------------------------------
+-- Event Registration
+------------------------------------------
 -- Register events for most chat message types
 frame:RegisterEvent("CHAT_MSG_CHANNEL")
 frame:RegisterEvent("CHAT_MSG_SAY")
@@ -26,7 +32,9 @@ frame:RegisterEvent("ADDON_LOADED")
 -- Add event handler for party changes
 frame:RegisterEvent("GROUP_ROSTER_UPDATE")
 
--- Add event handler for trade events
+------------------------------------------
+-- Trade Event Registration
+------------------------------------------
 frame:RegisterEvent("TRADE_SHOW")
 frame:RegisterEvent("TRADE_CLOSED")
 frame:RegisterEvent("TRADE_REQUEST_CANCEL")
@@ -41,7 +49,9 @@ frame:RegisterEvent("TRADE_TARGET_ITEM_CHANGED")
 frame:RegisterEvent("TRADE_SHOW")
 frame:RegisterEvent("TRADE_TARGET_ITEM_CHANGED")
 
--- Slash command handler function
+------------------------------------------
+-- Slash Command Handling
+------------------------------------------
 local function SlashCommandHandler(msg)
     msg = string.lower(msg or "")
     
@@ -67,6 +77,9 @@ SLASH_MYADDON1 = "/myaddon"
 SLASH_MYADDON2 = "/ma"
 SlashCmdList["MYADDON"] = SlashCommandHandler
 
+------------------------------------------
+-- Message Handling Functions
+------------------------------------------
 local function HandleMessage(message, playerName)
     local lowerMessage = string.lower(message)
     local isLookingForPort = (string.find(lowerMessage, "wtb") or string.find(lowerMessage, "lf")) and
@@ -81,7 +94,7 @@ local function HandleMessage(message, playerName)
         if foundDestination then
             print("Found player " .. playerName .. " looking for portal to " .. foundDestination)
             Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
-            TradePortal.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), TradePortal.PURCHASE_STATUS.PENDING_TRADE)
+            Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
 
             InviteUnit(playerName)
             SendChatMessage("Im selling ports to " .. foundDestination .. " for 1g at SW Fountain.", "WHISPER", nil, playerName)
@@ -91,7 +104,9 @@ local function HandleMessage(message, playerName)
     end
 end
 
--- Update the TRADE_SHOW event to handle water and food trades
+------------------------------------------
+-- Event Handler
+------------------------------------------
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
         local addonName = ...
@@ -106,6 +121,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
         return 
     end
     
+    ------------------------------------------
+    -- Chat Message Events
+    ------------------------------------------
     if event == "CHAT_MSG_CHANNEL" then
         local message, playerName, _, _, _, _, _, channelIndex = ...
         
@@ -137,7 +155,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
             if foundDestination then
                 print("Player " .. playerName .. " wants to port to " .. foundDestination)
                 Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
-                TradePortal.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), TradePortal.PURCHASE_STATUS.PENDING_TRADE)
+                Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
                 
                 -- If they're not already in the group, invite them
                 if not UnitInParty(playerName) then
@@ -156,6 +174,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
         -- Continue with your existing code
         TradeProximityMonitor.Start()
 
+    ------------------------------------------
+    -- Trade Events
+    ------------------------------------------
     elseif event == "TRADE_SHOW" then
         if not TradeFrame:IsVisible() then
             CancelTrade()
@@ -173,8 +194,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
             print("Trade with " .. player .. " initiated. Please wait for the trade to be accepted.")
     
             -- If player is not buying a port
-            if TradePortal.GetPlayerPortalPurchaseStatus(player) == nil then
-                TradeFood.Fill()
+            if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
+                Trade.Fill()
             end
         end
 
@@ -184,29 +205,21 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "TRADE_ACCEPT_UPDATE" then
         local playerAccepted, targetAccepted = ...
         local player = UnitName("NPC")
-
-        -- Check if player is not buying a port
-        -- if TradePortal.GetPlayerPortalPurchaseStatus(player) == nil then
-        --     C_Timer.NewTimer(1, function()
-        --         AcceptTrade()
-        --     end)
-        --     return
-        -- end
         
-         -- For portal trades
+        -- The other player has accepted but we haven't yet
         if targetAccepted == 1 and playerAccepted == 0 then
-            -- The other player has accepted but we haven't yet
             -- Verify the money is correct before accepting
-            if TradePortal.VerifyPortalPurchase(player) then
+            if Trade.VerifyPortalPurchase(player) then
                 AcceptTrade()
             end
+        -- Both players have accepted
         elseif playerAccepted == 1 and targetAccepted == 1 then            
             TradeTimeoutMonitor.Stop()
 
-            TradePortal.SetPlayerPortalPurchaseStatus(Utils.StripRealm(player), TradePortal.PURCHASE_STATUS.PAID)
+            Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(player), Trade.PURCHASE_STATUS.PAID)
             
             -- Show trade summary
-            TradePortal.ShowTradeSummary(player)
+            Trade.ShowTradeSummary(player)
             
             -- Cast the portal spell
             local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
@@ -221,7 +234,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
         local player = UnitName("NPC")
 
          -- Check if not buying a port
-        if TradePortal.GetPlayerPortalPurchaseStatus(player) == nil then
+        if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
             -- Set timeout of 2 seconds, then accept trade
             C_Timer.NewTimer(1, function()
                 AcceptTrade()

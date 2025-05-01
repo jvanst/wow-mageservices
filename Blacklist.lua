@@ -1,12 +1,23 @@
+------------------------------------------
+-- Blacklist Module
+------------------------------------------
 local MyAddOn = MYADDON
 local ContainerUI = MyAddOn.ContainerUI
 
--- Create the Utils module
+------------------------------------------
+-- Create the Blacklist module
+------------------------------------------
 local Blacklist = {}
 
+------------------------------------------
+-- Blacklist Data
+------------------------------------------
 -- Table to store blacklisted players
 local blacklistedPlayers = {}
 
+------------------------------------------
+-- UI Elements
+------------------------------------------
 -- Use the container frame from ContainerUI
 Blacklist.Container = ContainerUI.Frame
 
@@ -20,6 +31,10 @@ Blacklist.KickButton:Hide()
 -- Create a timer to hide the button after 15 seconds
 Blacklist.HideTimer = nil
 
+------------------------------------------
+-- Blacklist Functions
+------------------------------------------
+
 -- Function to handle trade requests and check if player is blacklisted
 function Blacklist.CheckPlayer(playerName)
     if blacklistedPlayers[playerName] then
@@ -28,6 +43,7 @@ function Blacklist.CheckPlayer(playerName)
     return true
 end
 
+-- Function to add a player to the blacklist
 function Blacklist.AddPlayer(playerName)
     blacklistedPlayers[playerName] = true
 
@@ -58,9 +74,12 @@ function Blacklist.AddPlayer(playerName)
     end)
 end
 
+-- Function to remove a player from the blacklist
 function Blacklist.RemovePlayer(playerName)
     blacklistedPlayers[playerName] = nil
 end
 
+------------------------------------------
 -- Register the module in the addon namespace
+------------------------------------------
 MyAddOn.Blacklist = Blacklist

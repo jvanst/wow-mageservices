@@ -1,8 +1,17 @@
+------------------------------------------
+-- Container UI Module
+------------------------------------------
 local MyAddOn = MYADDON
 local Blacklist = MyAddOn.Blacklist
 
+------------------------------------------
 -- Create the ContainerUI module
+------------------------------------------
 local ContainerUI = {}
+
+------------------------------------------
+-- UI Elements
+------------------------------------------
 
 -- Create a movable container frame
 ContainerUI.Frame = CreateFrame("Frame", "MyAddOnPortalContainer", UIParent)
@@ -30,7 +39,11 @@ ContainerUI.Frame.header = ContainerUI.Frame:CreateFontString(nil, "OVERLAY", "G
 ContainerUI.Frame.header:SetPoint("TOP", 0, -5)
 ContainerUI.Frame.header:SetText("Actions")
 
--- Add a function to toggle container visibility
+------------------------------------------
+-- UI Functions
+------------------------------------------
+
+-- Function to toggle container visibility
 function ContainerUI.ToggleVisibility()
     if ContainerUI.Frame:IsShown() then
         ContainerUI.Frame:Hide()
@@ -80,11 +93,17 @@ end
 -- Add the Kick button to the container
 AddKickButton()
 
+------------------------------------------
+-- Slash Commands
+------------------------------------------
+
 -- Create a slash command to toggle the frame
 SLASH_PORTALFRAME1 = "/portalframe"
 SlashCmdList["PORTALFRAME"] = function()
     ContainerUI.ToggleVisibility()
 end
 
+------------------------------------------
 -- Register the module in the addon namespace
+------------------------------------------
 MyAddOn.ContainerUI = ContainerUI

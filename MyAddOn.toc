@@ -10,8 +10,7 @@ Advertiser.lua
 Destinations.lua
 Blacklist.lua
 Utilities.lua
-TradeFood.lua
-TradePortal.lua
+Trade.lua
 TradeProximityMonitor.lua
 TradeTimeoutMonitor.lua
 Spells.lua

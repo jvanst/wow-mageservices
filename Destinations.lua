@@ -1,8 +1,16 @@
+------------------------------------------
+-- Destinations Module
+------------------------------------------
 local MyAddOn = MYADDON
 
+------------------------------------------
 -- Create the Destinations module
+------------------------------------------
 local Destinations = {}
 
+------------------------------------------
+-- Destination Data
+------------------------------------------
 -- This table will store the destination keywords
 -- The keys are the destination names, and the values are lists of keywords
 -- that can be used to identify them in messages
@@ -12,8 +20,11 @@ local destinationMap = {
     Darnassus = {"darn", "darnassus", "darnas"},
 }
 
--- A function to find a destination in a message
--- This function will check if the message contains any of the destination keywords
+------------------------------------------
+-- Destination Functions
+------------------------------------------
+
+-- Function to find a destination in a message
 function Destinations.FindInMessage(message)
     if not message or type(message) ~= "string" then
         return nil
@@ -34,10 +45,14 @@ function Destinations.FindInMessage(message)
     return nil
 end
 
+------------------------------------------
+-- Player Destination Tracking
+------------------------------------------
 -- This table will store player destinations
 -- The keys will be player names (normalized), and the values will be destination names
 local playerDestinations = {}
 
+-- Function to add player destination
 function Destinations.AddPlayerDestination(playerName, destination)
     if not playerName or not destination then
         return false
@@ -56,6 +71,7 @@ function Destinations.AddPlayerDestination(playerName, destination)
     return true
 end
 
+-- Function to get player destination
 function Destinations.GetPlayerDestination(playerName)
     if not playerName then
         return nil
@@ -68,6 +84,7 @@ function Destinations.GetPlayerDestination(playerName)
     return playerDestinations[playerName]
 end
 
+-- Function to remove player destination
 function Destinations.RemovePlayerDestination(playerName)
     if not playerName then
         return false
@@ -85,5 +102,7 @@ function Destinations.RemovePlayerDestination(playerName)
     return false
 end
 
+------------------------------------------
 -- Register the module in the addon namespace
+------------------------------------------
 MyAddOn.Destinations = Destinations

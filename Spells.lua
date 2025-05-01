@@ -1,9 +1,17 @@
+------------------------------------------
+-- Spells Module
+------------------------------------------
 local MyAddOn = MYADDON
 local ContainerUI = MyAddOn.ContainerUI
 
+------------------------------------------
 -- Create the Spells module
+------------------------------------------
 local Spells = {}
 
+------------------------------------------
+-- Portal Configuration
+------------------------------------------
 -- Portal spell names for Classic Era
 Spells.PortalNames = {
     Stormwind = "Portal: Stormwind",
@@ -12,6 +20,9 @@ Spells.PortalNames = {
     -- Add other destinations as needed
 }
 
+------------------------------------------
+-- UI Elements
+------------------------------------------
 -- Use the container frame from ContainerUI
 Spells.Container = ContainerUI.Frame
 
@@ -24,6 +35,9 @@ Spells.CastButton:Hide()
 -- Create a timer to hide the button after 15 seconds
 Spells.HideTimer = nil
 
+------------------------------------------
+-- Portal Functions
+------------------------------------------
 -- Function to cast a portal spell based on destination
 function Spells.CastPortal(destination)
     local spellName = Spells.PortalNames[destination]
@@ -86,18 +100,27 @@ function Spells.CastPortal(destination)
     return true
 end
 
+------------------------------------------
+-- Food & Water Configuration
+------------------------------------------
 -- Conjure spell names for Classic Era
 Spells.ConjureNames = {
     water = "Conjure Water",
     food = "Conjure Food"
 }
 
+------------------------------------------
+-- Food & Water UI Elements
+------------------------------------------
 -- Create a secure action button for conjuring inside the container
 Spells.ConjureButton = CreateFrame("Button", "MyAddOnConjureButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.ConjureButton:SetSize(150, 30)
 Spells.ConjureButton:SetPoint("BOTTOM", Spells.Container, "BOTTOM", 0, 45) -- Position above the portal button
 Spells.ConjureButton:SetText("Conjure Food/Water")
 
+------------------------------------------
+-- Food & Water Functions
+------------------------------------------
 -- Function to check if an item exists in bags
 function Spells.HasItemInBags(itemName)
     for bag = 0, NUM_BAG_SLOTS do
@@ -143,8 +166,8 @@ function Spells.UpdateConjureButton()
     end
     
     -- Count current items
-    local waterCount = Spells.CountItemsInBags(MyAddOn.TradeFood.Items.water)
-    local foodCount = Spells.CountItemsInBags(MyAddOn.TradeFood.Items.food)
+    local waterCount = Spells.CountItemsInBags(MyAddOn.Trade.Items.water)
+    local foodCount = Spells.CountItemsInBags(MyAddOn.Trade.Items.food)
     
     -- Hide button if we have enough of both
     if waterCount >= waterThreshold and foodCount >= foodThreshold then
@@ -166,6 +189,9 @@ function Spells.UpdateConjureButton()
     end
 end
 
+------------------------------------------
+-- UI Event Handlers
+------------------------------------------
 -- Set up tooltip for the button
 Spells.ConjureButton:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -194,6 +220,9 @@ Spells.ConjureButton:SetScript("PostClick", function(self)
     end)
 end)
 
+------------------------------------------
+-- Event Registration
+------------------------------------------
 -- Create a frame to update the button state when bags change or mana changes
 local bagUpdateFrame = CreateFrame("Frame")
 bagUpdateFrame:RegisterEvent("BAG_UPDATE")
@@ -206,8 +235,13 @@ bagUpdateFrame:SetScript("OnEvent", function(self, event, unit)
     end
 end)
 
+------------------------------------------
+-- Initialization
+------------------------------------------
 -- Initialize the button
 Spells.UpdateConjureButton()
 
+------------------------------------------
 -- Register the module in the addon namespace
+------------------------------------------
 MyAddOn.Spells = Spells
