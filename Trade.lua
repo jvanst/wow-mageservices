@@ -44,9 +44,12 @@ local REQUIRED_GOLD_AMOUNT = 10000
 local portalPurchaseStatus = {}
 
 -- Portal purchase status constants
+-- When a player has been detected as wanting to buy a portal, they will be marked as pending trade.
+-- Once the trade window is open, they will be marked as pending payment. This prevents constantly 
+-- opening the trade window in TradeProximityMonitor.
 Trade.PURCHASE_STATUS = {
     PENDING_TRADE = "pending_trade",
-    PENDING = "pending_payment",
+    PENDING_PAYMENT = "pending_payment",
 }
 
 ------------------------------------------

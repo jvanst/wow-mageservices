@@ -53,7 +53,7 @@ function TradeProximityMonitor.Start()
                         print("Player " .. unitName .. " is in trade range, initiating trade.")
                         InitiateTrade(unit)
                         -- Set the player's purchase status to pending payment
-                        Trade.SetPlayerPortalPurchaseStatus(unitName, Trade.PURCHASE_STATUS.PENDING)
+                        Trade.SetPlayerPortalPurchaseStatus(unitName, Trade.PURCHASE_STATUS.PENDING_PAYMENT)
                         break
                     end
                 end
