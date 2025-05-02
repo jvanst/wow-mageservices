@@ -229,6 +229,71 @@ function Trade.ShowTradeSummary(player)
     end
 end
 
+-- Function to create and show the accept trade button
+function Trade.CreateAcceptTradeButton()
+    if Trade.AcceptTradeButton then
+        Trade.AcceptTradeButton:Show()
+        return
+    end
+    
+    -- Get the container from ContainerUI
+    local container = MageServices.ContainerUI.Frame
+    
+    -- Create the AcceptTrade button
+    Trade.AcceptTradeButton = CreateFrame("Button", "MageServicesAcceptTradeButton", container, "UIPanelButtonTemplate")
+    Trade.AcceptTradeButton:SetSize(150, 30)
+    -- Position will be handled by ContainerUI system
+    Trade.AcceptTradeButton:SetText("Accept Trade")
+    
+    -- Function to handle the AcceptTrade button click
+    Trade.AcceptTradeButton:SetScript("OnClick", function()
+        AcceptTrade()
+        print("|cFF33FF99Trade:|r Accepting trade...")
+    end)
+    
+    -- Add tooltip
+    Trade.AcceptTradeButton:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("Accept Trade")
+        GameTooltip:AddLine("Click to accept the current trade", 1, 1, 1)
+        GameTooltip:Show()
+    end)
+    
+    Trade.AcceptTradeButton:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+    
+    -- Register with ContainerUI layout system (priority 10 - top position)
+    MageServices.ContainerUI.RegisterButton(Trade.AcceptTradeButton, 10)
+    
+    -- Hide the button initially until trade window is shown
+    Trade.AcceptTradeButton:Hide()
+end
+
+-- Function to show/hide accept trade button
+function Trade.ToggleAcceptTradeButton(show)
+    if not Trade.AcceptTradeButton then
+        if show then
+            Trade.CreateAcceptTradeButton()
+        end
+        return
+    end
+    
+    -- Always show the button, but enable/disable based on parameter
+    Trade.AcceptTradeButton:Show()
+    
+    if show then
+        Trade.AcceptTradeButton:Enable()
+        Trade.AcceptTradeButton:SetAlpha(1.0)
+    else
+        Trade.AcceptTradeButton:Disable()
+        Trade.AcceptTradeButton:SetAlpha(0.5) -- Visual indicator that button is disabled
+    end
+end
+
+Trade.CreateAcceptTradeButton()
+Trade.ToggleAcceptTradeButton(false)
+
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------

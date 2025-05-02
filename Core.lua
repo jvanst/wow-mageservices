@@ -169,9 +169,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
 
     elseif event == "GROUP_ROSTER_UPDATE" then
         -- Set raid icon (star) on yourself
-        SetRaidTarget("player", 1)  -- 1 = Yellow Star
+        SetRaidTarget("player", 1)
         
-        -- Continue with your existing code
+        -- Start monitor trade proximity
         TradeProximityMonitor.Start()
 
     ------------------------------------------
@@ -200,17 +200,26 @@ frame:SetScript("OnEvent", function(self, event, ...)
         end
 
     elseif event == "TRADE_REQUEST_CANCEL" or event == "TRADE_CLOSED" then
+        Trade.ToggleAcceptTradeButton(false)
         TradeTimeoutMonitor.Stop()
 
     elseif event == "TRADE_ACCEPT_UPDATE" then
         local playerAccepted, targetAccepted = ...
         local player = UnitName("NPC")
+
+        print("TRADE_ACCEPT_UPDATE");
+
+        if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
+            C_Timer.After(1, function()
+                Trade.ToggleAcceptTradeButton(true)
+            end)
+            return
+        end
         
         -- The other player has accepted but we haven't yet
         if targetAccepted == 1 and playerAccepted == 0 then
-            -- Verify the money is correct before accepting
             if Trade.VerifyPortalPurchase(player) then
-                AcceptTrade()
+                Trade.ToggleAcceptTradeButton(true)
             end
         -- Both players have accepted
         elseif playerAccepted == 1 and targetAccepted == 1 then            
@@ -229,19 +238,5 @@ frame:SetScript("OnEvent", function(self, event, ...)
                 print("Error: No destination set for player " .. player)
             end
         end
-
-    elseif event == "TRADE_MONEY_CHANGED" then
-        local player = UnitName("NPC")
-
-         -- Check if not buying a port
-        if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
-            -- Set timeout of 2 seconds, then accept trade
-            C_Timer.NewTimer(1, function()
-                AcceptTrade()
-            end)
-            return
-        end
-    elseif event == "TRADE_CLOSED" then
-        TradeTimeoutMonitor.Stop()
     end
 end)

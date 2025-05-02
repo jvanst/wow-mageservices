@@ -29,8 +29,14 @@ Spells.Container = ContainerUI.Frame
 -- Create a secure action button for casting inside the container
 Spells.CastButton = CreateFrame("Button", "MageServicesCastButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.CastButton:SetSize(150, 30)
-Spells.CastButton:SetPoint("BOTTOM", Spells.Container, "BOTTOM", 0, 10)
-Spells.CastButton:Hide()
+-- Position will be handled by the ContainerUI layout system
+Spells.CastButton:SetText("Cast Portal")
+-- Initialize as disabled instead of hidden
+Spells.CastButton:Disable()
+Spells.CastButton:SetAlpha(0.5)
+
+-- Register with ContainerUI layout system (priority 20 - second position)
+ContainerUI.RegisterButton(Spells.CastButton, 20)
 
 -- Create a timer to hide the button after 15 seconds
 Spells.HideTimer = nil
@@ -60,24 +66,27 @@ function Spells.CastPortal(destination)
             return
         end
         
-        -- Hide conjure buttons while portal button is visible
-        Spells.ConjureButton:Hide()
+        -- Disable conjure button while portal button is enabled
+        Spells.ConjureButton:Disable()
+        Spells.ConjureButton:SetAlpha(0.5)
         
         -- Notify the user they need to click the button
         print("|cFF00FF00Click the button to cast " .. spellName .. "|r")
         
-        -- Show the button
-        Spells.CastButton:Show()
+        -- Enable the button
+        Spells.CastButton:Enable()
+        Spells.CastButton:SetAlpha(1.0)
         
-        -- Hide the button after 15 seconds if not clicked
+        -- Disable the button after 15 seconds if not clicked
         if Spells.HideTimer then
             Spells.HideTimer:Cancel()
         end
         
         Spells.HideTimer = C_Timer.NewTimer(15, function()
-            Spells.CastButton:Hide()
-            print("Portal cast button hidden due to timeout")
-            -- Show conjure buttons again
+            Spells.CastButton:Disable()
+            Spells.CastButton:SetAlpha(0.5)
+            print("Portal cast button disabled due to timeout")
+            -- Enable conjure button again
             Spells.UpdateConjureButton()
         end)
     end
@@ -91,9 +100,10 @@ function Spells.CastPortal(destination)
             Spells.HideTimer:Cancel()
             Spells.HideTimer = nil
         end
-        Spells.CastButton:Hide()
+        Spells.CastButton:Disable()
+        Spells.CastButton:SetAlpha(0.5)
         
-        -- Show conjure buttons again
+        -- Enable conjure button again
         Spells.UpdateConjureButton()
     end)
     
@@ -115,8 +125,10 @@ Spells.ConjureNames = {
 -- Create a secure action button for conjuring inside the container
 Spells.ConjureButton = CreateFrame("Button", "MageServicesConjureButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.ConjureButton:SetSize(150, 30)
-Spells.ConjureButton:SetPoint("BOTTOM", Spells.Container, "BOTTOM", 0, 45) -- Position above the portal button
-Spells.ConjureButton:SetText("Conjure Food/Water")
+Spells.ConjureButton:SetText("Conjure")
+
+-- Register with ContainerUI layout system (priority 30 - third position)
+ContainerUI.RegisterButton(Spells.ConjureButton, 30)
 
 ------------------------------------------
 -- Food & Water Functions
@@ -159,9 +171,10 @@ function Spells.UpdateConjureButton()
     local maxMana = UnitPowerMax("player", Enum.PowerType.Mana)
     local manaPercentage = (currentMana / maxMana) * 100
     
-    -- Hide button if mana is below 25%
+    -- Disable button if mana is below 25%
     if manaPercentage < 25 then
-        Spells.ConjureButton:Hide()
+        Spells.ConjureButton:Disable()
+        Spells.ConjureButton:SetAlpha(0.5)
         return
     end
     
@@ -169,23 +182,23 @@ function Spells.UpdateConjureButton()
     local waterCount = Spells.CountItemsInBags(MageServices.Trade.Items.water)
     local foodCount = Spells.CountItemsInBags(MageServices.Trade.Items.food)
     
-    -- Hide button if we have enough of both
+    -- Disable button if we have enough of both
     if waterCount >= waterThreshold and foodCount >= foodThreshold then
-        Spells.ConjureButton:Hide()
+        Spells.ConjureButton:Disable()
+        Spells.ConjureButton:SetAlpha(0.5)
         return
     else
-        Spells.ConjureButton:Show()
+        Spells.ConjureButton:Enable()
+        Spells.ConjureButton:SetAlpha(1.0)
     end
     
     -- Determine what to conjure based on what's most needed
     if waterCount < waterThreshold and (waterCount < foodThreshold or foodCount >= foodThreshold) then
         Spells.ConjureButton:SetAttribute("type", "spell")
         Spells.ConjureButton:SetAttribute("spell", Spells.ConjureNames.water)
-        Spells.ConjureButton:SetText("Conjure Water")
     elseif foodCount < foodThreshold then
         Spells.ConjureButton:SetAttribute("type", "spell")
         Spells.ConjureButton:SetAttribute("spell", Spells.ConjureNames.food)
-        Spells.ConjureButton:SetText("Conjure Food")
     end
 end
 

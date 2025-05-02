@@ -15,7 +15,7 @@ local ContainerUI = {}
 
 -- Create a movable container frame
 ContainerUI.Frame = CreateFrame("Frame", "MageServicesContainer", UIParent)
-ContainerUI.Frame:SetSize(170, 120)
+ContainerUI.Frame:SetSize(170, 200) -- Increased height to accommodate buttons
 ContainerUI.Frame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
 ContainerUI.Frame:SetMovable(true)
 ContainerUI.Frame:EnableMouse(true)
@@ -40,6 +40,70 @@ ContainerUI.Frame.header:SetPoint("TOP", 0, -5)
 ContainerUI.Frame.header:SetText("MageServices Actions")
 
 ------------------------------------------
+-- Button Layout Management
+------------------------------------------
+
+-- Table to track all buttons in the container
+ContainerUI.Buttons = {}
+
+-- Function to register a button with the container
+function ContainerUI.RegisterButton(button, priority)
+    table.insert(ContainerUI.Buttons, {
+        button = button,
+        priority = priority or 100 -- Default priority (lower values = higher in the container)
+    })
+    
+    -- Sort buttons by priority
+    ContainerUI.LayoutButtons()
+    
+    return button
+end
+
+-- Function to layout all buttons in the container
+function ContainerUI.LayoutButtons()
+    -- Sort buttons by priority (lower values first)
+    table.sort(ContainerUI.Buttons, function(a, b) 
+        return a.priority < b.priority 
+    end)
+    
+    local yOffset = -25 -- Start below the header
+    local spacing = 5 -- Space between buttons
+    
+    -- Position each button
+    for _, buttonInfo in ipairs(ContainerUI.Buttons) do
+        local button = buttonInfo.button
+        if button then
+            button:ClearAllPoints()
+            button:SetPoint("TOP", ContainerUI.Frame, "TOP", 0, yOffset)
+            local _, height = button:GetSize()
+            yOffset = yOffset - (height + spacing)
+        end
+    end
+end
+
+-- Function to update the container size based on visible buttons
+function ContainerUI.UpdateContainerSize()
+    local visibleButtons = 0
+    local totalHeight = 30 -- Header space
+    local buttonSpacing = 5
+    
+    for _, buttonInfo in ipairs(ContainerUI.Buttons) do
+        if buttonInfo.button:IsShown() and buttonInfo.button:GetAlpha() > 0.1 then
+            visibleButtons = visibleButtons + 1
+            local _, height = buttonInfo.button:GetSize()
+            totalHeight = totalHeight + height + buttonSpacing
+        end
+    end
+    
+    -- Minimum height to avoid empty container looking odd
+    totalHeight = math.max(totalHeight, 50)
+    
+    -- Set the container height (keep width the same)
+    local width = ContainerUI.Frame:GetWidth()
+    ContainerUI.Frame:SetSize(width, totalHeight)
+end
+
+------------------------------------------
 -- UI Functions
 ------------------------------------------
 
@@ -48,50 +112,10 @@ function ContainerUI.ToggleVisibility()
     if ContainerUI.Frame:IsShown() then
         ContainerUI.Frame:Hide()
     else
+        ContainerUI.UpdateContainerSize()
         ContainerUI.Frame:Show()
     end
 end
-
--- Function to add a Kick button to the container
-local function AddKickButton()
-    -- Create the Kick button
-    local KickButton = CreateFrame("Button", "MageServicesKickButton", ContainerUI.Frame, "UIPanelButtonTemplate")
-    KickButton:SetSize(150, 30)
-    KickButton:SetPoint("TOP", ContainerUI.Frame, "TOP", 0, -30)
-    KickButton:SetText("Kick Player")
-    KickButton:Hide()
-
-    -- Function to handle the Kick button click
-    KickButton:SetScript("OnClick", function()
-        local playerName = UnitName("NPC")
-        if playerName then
-            Blacklist.AddPlayer(playerName)
-            print("Player " .. playerName .. " has been blacklisted and kicked.")
-            -- Add logic to kick the player from the group if applicable
-        else
-            print("No player to kick.")
-        end
-        KickButton:Hide()
-    end)
-
-    -- Update the ShowKickButton function to accept a player name
-    function ContainerUI.ShowKickButton(playerName)
-        if playerName then
-            KickButton:SetText("Kick player")
-            KickButton:Show()
-        else
-            KickButton:Hide()
-        end
-    end
-
-    -- Hide the Kick button when the container is hidden
-    ContainerUI.Frame:HookScript("OnHide", function()
-        KickButton:Hide()
-    end)
-end
-
--- Add the Kick button to the container
-AddKickButton()
 
 ------------------------------------------
 -- Slash Commands
