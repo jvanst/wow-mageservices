@@ -22,7 +22,7 @@ Trade.ClassConfig = {
     ["SHAMAN"] = { water = 5, food = 1 },
     ["MAGE"] = { water = 3, food = 3 }, -- Mages can create their own
     ["WARLOCK"] = { water = 3, food = 3 },
-    ["DRUID"] = { water = 4, food = 2 },
+    ["DRUID"] = { water = 5, food = 1 },
     -- Default for unknown classes
     ["DEFAULT"] = { water = 2, food = 2 }
 }
