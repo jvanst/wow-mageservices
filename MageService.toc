@@ -3,8 +3,10 @@
 ## Notes: Automates mage portals selling and consumable trading.
 ## Author: James
 ## Version: 1.0
+## SavedVariables: MageServiceDB
 
 Init.lua
+Settings.lua
 ContainerUI.lua
 Advertiser.lua
 Destinations.lua

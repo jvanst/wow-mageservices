@@ -9,11 +9,7 @@ local Trade = MageService.Trade
 local TradeProximityMonitor = MageService.TradeProximityMonitor
 local TradeTimeoutMonitor = MageService.TradeTimeoutMonitor
 local Spells = MageService.Spells
-
-------------------------------------------
--- Addon Configuration
-------------------------------------------
-local addonEnabled = true -- Default to enabled
+local Settings = MageService.Settings
 
 local frame = CreateFrame("Frame")
 
@@ -56,14 +52,15 @@ local function SlashCommandHandler(msg)
     msg = string.lower(msg or "")
     
     if msg == "on" then
-        addonEnabled = true
+        Settings.SetAddonEnabled(true)
         print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
     elseif msg == "off" then
-        addonEnabled = false
+        Settings.SetAddonEnabled(false)
         print("|cFF33FF99MageService:|r |cFFFF0000Disabled|r")
     else
         -- Toggle if no specific command
-        addonEnabled = not addonEnabled
+        local addonEnabled = not Settings.IsAddonEnabled()
+        Settings.SetAddonEnabled(addonEnabled)
         if addonEnabled then
             print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
         else
@@ -88,20 +85,20 @@ local function HandleMessage(message, playerName)
     local isLookingForWaterOrFood = (string.find(lowerMessage, "wtb") or string.find(lowerMessage, "lf")) and
                                     (string.find(lowerMessage, "water") or string.find(lowerMessage, "food"))
 
-    if isLookingForPort then
-        local foundDestination = Destinations.FindInMessage(message)
+    -- if isLookingForPort then
+    --     local foundDestination = Destinations.FindInMessage(message)
 
-        if foundDestination then
-            print("Found player " .. playerName .. " looking for portal to " .. foundDestination)
-            Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
-            Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
+    --     if foundDestination then
+    --         print("Found player " .. playerName .. " looking for portal to " .. foundDestination)
+    --         Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
+    --         Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
 
-            InviteUnit(playerName)
-            SendChatMessage("Im selling ports to " .. foundDestination .. " for 1g at SW Fountain.", "WHISPER", nil, playerName)
-        end
-    elseif isLookingForWaterOrFood then
-        SendChatMessage("I'm trading mage water and food at SW Fountain", "WHISPER", nil, playerName)
-    end
+    --         InviteUnit(playerName)
+    --         SendChatMessage("Im selling ports to " .. foundDestination .. " for 1g at SW Fountain.", "WHISPER", nil, playerName)
+    --     end
+    -- elseif isLookingForWaterOrFood then
+    --     SendChatMessage("I'm trading mage water and food at SW Fountain", "WHISPER", nil, playerName)
+    -- end
 end
 
 ------------------------------------------
@@ -112,12 +109,19 @@ frame:SetScript("OnEvent", function(self, event, ...)
         local addonName = ...
         if addonName == "MageService" then
             print("|cFF33FF99MageService|r has been loaded successfully! Type |cFFFFFF00/mageservices|r or |cFFFFFF00/ms|r to toggle.")
+
+            -- Print the current enabled state
+            if Settings.IsAddonEnabled() then
+                print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
+            else
+                print("|cFF33FF99MageService:|r |cFFFF0000Disabled|r")
+            end
         end
         return -- Always process ADDON_LOADED regardless of enabled state
     end
     
     -- Skip other event processing if addon is disabled
-    if not addonEnabled and event ~= "ADDON_LOADED" then 
+    if not Settings.IsAddonEnabled() and event ~= "ADDON_LOADED" then 
         return 
     end
     
@@ -171,7 +175,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
         -- Set raid icon (star) on yourself
         SetRaidTarget("player", 1)
         
-        -- Start monitor trade proximity
+        -- Start to monitor trade proximity
         TradeProximityMonitor.Start()
 
     ------------------------------------------

@@ -2,6 +2,8 @@
 
 Automates mage portal selling and consumable trading in World of Warcraft: Classic.
 
+_Note: Addon is disabled by default. Use `/mageservice on`_
+
 ## Features
 
 - Scans local and instance chat for players wanting to buy ports, water or food
@@ -12,9 +14,10 @@ Automates mage portal selling and consumable trading in World of Warcraft: Class
 - Blacklists players who keep the trade window open without action
 - Ensure casting a port doesn't interfer with conjuring food/water
 - Prints a trade summary
+- Persists settings across game sessions
 
 **Buttons**
-- `Accept Trade` Appears once a trade is accaptable
+- `Accept Trade` Appears once a trade is acceptable
 - `Cast Portal` Appears once a player has paid for a port
 - `Conjure` Appears when the players backpack doesn't have enough water/food
 - `Advertise` Appears every 60 seconds to send advertisement to local and instance channel
@@ -30,6 +33,7 @@ MageService uses a modular design with a central namespace (`MAGESERVICE`) that 
 ### Module Structure
 
 - **[Init.lua](Init.lua)**: Initializes the global `MAGESERVICE` table
+- **[Settings.lua](Settings.lua)**: Manages persistent settings that are saved between game sessions
 - **[Core.lua](Core.lua)**: Main event handler and integration point for all modules
 - **[ContainerUI.lua](ContainerUI.lua)**: Manages the movable UI container and button layout system
 - **[Advertiser.lua](Advertiser.lua)**: Handles chat advertisements with cooldown management
@@ -48,10 +52,13 @@ MageService uses a modular design with a central namespace (`MAGESERVICE`) that 
 3. **Player Handling**: Tracks player status, destinations, and trade states
 4. **UI Management**: Dynamic button creation and layout based on current context
 5. **Trade Automation**: Manages the entire trade workflow from detection to completion
+6. **Settings Management**: Persists user preferences across sessions via WoW's SavedVariables system
 
 ### Slash Commands
 
 - `/ms` or `/mageservice`: Toggle the addon on/off
+- `/ms on` or `/mageservice on`: Explicitly enable the addon
+- `/ms off` or `/mageservice off`: Explicitly disable the addon
 - `/mageservice show`: Show the UI container
 - `/mageservice hide`: Hide the UI container
 
@@ -62,3 +69,4 @@ MageService uses a modular design with a central namespace (`MAGESERVICE`) that 
 - Ensure port isn't on cd
 - Respond to players asking for specific water/food stack combinations
 - Bag sorting
+- Add more user-configurable settings
