@@ -121,10 +121,23 @@ end
 -- Slash Commands
 ------------------------------------------
 
--- Create a slash command to toggle the frame
-SLASH_PORTALFRAME1 = "/portalframe"
-SlashCmdList["PORTALFRAME"] = function()
-    ContainerUI.ToggleVisibility()
+-- Modify the existing MAGESERVICE slash command to handle UI visibility
+local existingMageServiceHandler = SlashCmdList["MAGESERVICE"]
+
+SlashCmdList["MAGESERVICE"] = function(msg)
+    msg = string.lower(msg or "")
+    
+    if msg == "show" then
+        ContainerUI.Frame:Show()
+        ContainerUI.UpdateContainerSize()
+        print("|cFF33FF99MageService:|r UI shown")
+    elseif msg == "hide" then
+        ContainerUI.Frame:Hide()
+        print("|cFF33FF99MageService:|r UI hidden")
+    else
+        -- Call the original handler for other commands
+        existingMageServiceHandler(msg)
+    end
 end
 
 ------------------------------------------

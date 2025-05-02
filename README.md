@@ -21,6 +21,40 @@ Automates mage portal selling and consumable trading in World of Warcraft: Class
 
 ![Screenshot 2025-05-02 142359](https://github.com/user-attachments/assets/f82609e9-f5e2-4944-b97f-cdc3487ba849)
 
+## Technical Overview
+
+### Architecture
+
+MageService uses a modular design with a central namespace (`MAGESERVICE`) that stores references to all modules. Each module handles a specific aspect of functionality and is registered in the main namespace.
+
+### Module Structure
+
+- **[Init.lua](Init.lua)**: Initializes the global `MAGESERVICE` table
+- **[Core.lua](Core.lua)**: Main event handler and integration point for all modules
+- **[ContainerUI.lua](ContainerUI.lua)**: Manages the movable UI container and button layout system
+- **[Advertiser.lua](Advertiser.lua)**: Handles chat advertisements with cooldown management
+- **[Blacklist.lua](Blacklist.lua)**: Manages player blacklisting system
+- **[Destinations.lua](Destinations.lua)**: Handles portal destination detection and mapping
+- **[Spells.lua](Spells.lua)**: Controls spell casting for portals and conjuring
+- **[Trade.lua](Trade.lua)**: Manages trade window interactions and inventory operations
+- **[TradeProximityMonitor.lua](TradeProximityMonitor.lua)**: Monitors nearby players for automated trading
+- **[TradeTimeoutMonitor.lua](TradeTimeoutMonitor.lua)**: Handles trade timeout detection and cancellation
+- **[Utilities.lua](Utilities.lua)**: Provides common utility functions
+
+### Data Flow
+
+1. **Event Registration**: The Core module registers for WoW events and distributes handling to appropriate modules
+2. **Chat Processing**: Monitors chat channels for portal/food/water requests
+3. **Player Handling**: Tracks player status, destinations, and trade states
+4. **UI Management**: Dynamic button creation and layout based on current context
+5. **Trade Automation**: Manages the entire trade workflow from detection to completion
+
+### Slash Commands
+
+- `/ms` or `/mageservice`: Toggle the addon on/off
+- `/mageservice show`: Show the UI container
+- `/mageservice hide`: Hide the UI container
+
 ## TODO
 
 - Detect with party invites fails

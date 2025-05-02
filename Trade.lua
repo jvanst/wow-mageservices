@@ -47,7 +47,6 @@ local portalPurchaseStatus = {}
 Trade.PURCHASE_STATUS = {
     PENDING_TRADE = "pending_trade",
     PENDING = "pending_payment",
-    PAID = "paid",
 }
 
 ------------------------------------------
