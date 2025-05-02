@@ -21,6 +21,8 @@ frame:RegisterEvent("CHAT_MSG_CHANNEL")
 frame:RegisterEvent("CHAT_MSG_SAY")
 frame:RegisterEvent("CHAT_MSG_YELL")
 frame:RegisterEvent("CHAT_MSG_WHISPER")
+frame:RegisterEvent("CHAT_MSG_PARTY")
+frame:RegisterEvent("CHAT_MSG_PARTY_LEADER")
 
 -- Register the ADDON_LOADED event to print an initialization message
 frame:RegisterEvent("ADDON_LOADED")
@@ -122,6 +124,24 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "CHAT_MSG_YELL" then
         local message, playerName = ...
         HandleMessage(message, playerName)
+
+    elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
+        local message, playerName = ...
+        
+        -- Players seem to respond to the whisper message in party chat, so we need to handle that too
+        -- Check if this is a response to our destination question
+        local lowerMessage = string.lower(message)
+        local foundDestination = Destinations.FindInMessage(message)
+        
+        if foundDestination then
+            print("Player " .. playerName .. " wants to port to " .. foundDestination)
+            Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
+
+            -- If the player doesn't have a pending trade status, set it to pending trade
+            if Trade.GetPlayerPortalPurchaseStatus(playerName) == nil then
+                Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
+            end
+        end
 
     elseif event == "CHAT_MSG_WHISPER" then
         local message, playerName = ...
