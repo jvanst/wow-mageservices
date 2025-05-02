@@ -15,9 +15,9 @@ local Destinations = {}
 -- The keys are the destination names, and the values are lists of keywords
 -- that can be used to identify them in messages
 local destinationMap = {
-    Stormwind = {"sw", "stormw", "stormwind", "storm wind"},
-    Ironforge = {"if", "ironforge", "ironf"},
-    Darnassus = {"darn", "darnassus", "darnas"},
+    Stormwind = {"sw", "stormw", "stormwind", "storm wind", "strom", "stormwin", "stomwind", "swind", "stormwnd", "swcity", "stormcity", "human city", "sw city"},
+    Ironforge = {"if", "ironforge", "ironf", "iron forge", "iforge", "iron f", "dwarfcity", "dwarf city", "irnforge", "forge", "ironfoge", "irnforg"},
+    Darnassus = {"darn", "darnassus", "darnas", "darnasus", "darnassis", "darnass", "nelfs", "nightelf city", "nelf city", "elf city", "darnassus city", "darn city", "tree city"},
 }
 
 ------------------------------------------
