@@ -200,6 +200,10 @@ frame:SetScript("OnEvent", function(self, event, ...)
                 end)
             end
 
+            if playerAccepted == 1 and targetAccepted == 1 then
+                Trade.PrintTradeSummary(player)
+            end
+
             return
         end
 
