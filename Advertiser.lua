@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Advertiser Module
 ------------------------------------------
-local MageServices = MAGESERVICES
-local ContainerUI = MageServices.ContainerUI
+local MageService = MAGESERVICE
+local ContainerUI = MageService.ContainerUI
 
 ------------------------------------------
 -- Create the Advertiser module
@@ -68,7 +68,7 @@ end
 
 Advertiser.Container = ContainerUI.Frame
     
-Advertiser.Button = CreateFrame("Button", "MageServicesAdvertiseButton", Advertiser.Container, "UIPanelButtonTemplate")
+Advertiser.Button = CreateFrame("Button", "MageServiceAdvertiseButton", Advertiser.Container, "UIPanelButtonTemplate")
 
 Advertiser.Button:SetSize(150, 30)
 Advertiser.Button:SetText("Advertise")
@@ -97,4 +97,4 @@ end)
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MageServices.Advertiser = Advertiser
+MageService.Advertiser = Advertiser

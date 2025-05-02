@@ -1,14 +1,14 @@
 ------------------------------------------
 -- Core Module
 ------------------------------------------
-local MageServices = MAGESERVICES
-local Destinations = MageServices.Destinations
-local Blacklist = MageServices.Blacklist
-local Utils = MageServices.Utils
-local Trade = MageServices.Trade
-local TradeProximityMonitor = MageServices.TradeProximityMonitor
-local TradeTimeoutMonitor = MageServices.TradeTimeoutMonitor
-local Spells = MageServices.Spells
+local MageService = MAGESERVICE
+local Destinations = MageService.Destinations
+local Blacklist = MageService.Blacklist
+local Utils = MageService.Utils
+local Trade = MageService.Trade
+local TradeProximityMonitor = MageService.TradeProximityMonitor
+local TradeTimeoutMonitor = MageService.TradeTimeoutMonitor
+local Spells = MageService.Spells
 
 ------------------------------------------
 -- Addon Configuration
@@ -57,25 +57,25 @@ local function SlashCommandHandler(msg)
     
     if msg == "on" then
         addonEnabled = true
-        print("|cFF33FF99MageServices:|r |cFF00FF00Enabled|r")
+        print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
     elseif msg == "off" then
         addonEnabled = false
-        print("|cFF33FF99MageServices:|r |cFFFF0000Disabled|r")
+        print("|cFF33FF99MageService:|r |cFFFF0000Disabled|r")
     else
         -- Toggle if no specific command
         addonEnabled = not addonEnabled
         if addonEnabled then
-            print("|cFF33FF99MageServices:|r |cFF00FF00Enabled|r")
+            print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
         else
-            print("|cFF33FF99MageServices:|r |cFFFF0000Disabled|r")
+            print("|cFF33FF99MageService:|r |cFFFF0000Disabled|r")
         end
     end
 end
 
 -- Register slash commands
-SLASH_MAGESERVICES1 = "/mageservices"
-SLASH_MAGESERVICES2 = "/ms"
-SlashCmdList["MAGESERVICES"] = SlashCommandHandler
+SLASH_MAGESERVICE1 = "/mageservices"
+SLASH_MAGESERVICE2 = "/ms"
+SlashCmdList["MAGESERVICE"] = SlashCommandHandler
 
 ------------------------------------------
 -- Message Handling Functions
@@ -110,8 +110,8 @@ end
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
         local addonName = ...
-        if addonName == "MageServices" then
-            print("|cFF33FF99MageServices|r has been loaded successfully! Type |cFFFFFF00/mageservices|r or |cFFFFFF00/ms|r to toggle.")
+        if addonName == "MageService" then
+            print("|cFF33FF99MageService|r has been loaded successfully! Type |cFFFFFF00/mageservices|r or |cFFFFFF00/ms|r to toggle.")
         end
         return -- Always process ADDON_LOADED regardless of enabled state
     end
@@ -228,16 +228,17 @@ frame:SetScript("OnEvent", function(self, event, ...)
     
                 Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(player), Trade.PURCHASE_STATUS.PAID)
                 
-                -- Show trade summary
-                Trade.ShowTradeSummary(player)
+                Trade.PrintTradeSummary(player)
                 
                 -- Cast the portal spell
                 local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
-                if destination then
-                    Spells.CastPortal(destination)
-                else
-                    print("Error: No destination set for player " .. player)
+
+                if destination == nil then
+                    print("|cFFFF0000Error:|r No destination set for player " .. player)
+                    return
                 end
+
+                Spells.CastPortal(destination)
             end
         end
     end

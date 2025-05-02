@@ -1,6 +1,6 @@
-local MageServices = MAGESERVICES
-local Destinations = MageServices.Destinations
-local Utils = MageServices.Utils
+local MageService = MAGESERVICE
+local Destinations = MageService.Destinations
+local Utils = MageService.Utils
 
 ------------------------------------------
 -- Create the Trade module
@@ -176,7 +176,7 @@ function Trade.SetPlayerPortalPurchaseStatus(playerName, status)
 end
 
 -- Function to display a summary of the trade
-function Trade.ShowTradeSummary(player)
+function Trade.PrintTradeSummary(player)
     -- Get traded items from player to target
     local givenItems = {}
     local waterCount = 0
@@ -227,10 +227,10 @@ function Trade.CreateAcceptTradeButton()
     end
     
     -- Get the container from ContainerUI
-    local container = MageServices.ContainerUI.Frame
+    local container = MageService.ContainerUI.Frame
     
     -- Create the AcceptTrade button
-    Trade.AcceptTradeButton = CreateFrame("Button", "MageServicesAcceptTradeButton", container, "UIPanelButtonTemplate")
+    Trade.AcceptTradeButton = CreateFrame("Button", "MageServiceAcceptTradeButton", container, "UIPanelButtonTemplate")
     Trade.AcceptTradeButton:SetSize(150, 30)
     -- Position will be handled by ContainerUI system
     Trade.AcceptTradeButton:SetText("Accept Trade")
@@ -256,7 +256,7 @@ function Trade.CreateAcceptTradeButton()
     end)
     
     -- Register with ContainerUI layout system (priority 10 - top position)
-    MageServices.ContainerUI.RegisterButton(Trade.AcceptTradeButton, 10)
+    MageService.ContainerUI.RegisterButton(Trade.AcceptTradeButton, 10)
     
     -- Hide the button initially until trade window is shown
     Trade.AcceptTradeButton:Hide()
@@ -289,4 +289,4 @@ Trade.ToggleAcceptTradeButton(false)
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MageServices.Trade = Trade
+MageService.Trade = Trade

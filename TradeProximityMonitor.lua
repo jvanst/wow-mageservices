@@ -4,8 +4,8 @@
 -- This module monitors the proximity of players in a group and initiates trade if they are within range.
 -- It uses the C_Timer API to create a ticker that checks for players in trade range every 2 seconds.
 
-local MageServices = MAGESERVICES
-local Trade = MageServices.Trade
+local MageService = MAGESERVICE
+local Trade = MageService.Trade
 
 ------------------------------------------
 -- Create the module
@@ -65,4 +65,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MageServices.TradeProximityMonitor = TradeProximityMonitor
+MageService.TradeProximityMonitor = TradeProximityMonitor

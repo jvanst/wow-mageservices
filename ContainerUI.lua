@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Container UI Module
 ------------------------------------------
-local MageServices = MAGESERVICES
-local Blacklist = MageServices.Blacklist
+local MageService = MAGESERVICE
+local Blacklist = MageService.Blacklist
 
 ------------------------------------------
 -- Create the ContainerUI module
@@ -14,7 +14,7 @@ local ContainerUI = {}
 ------------------------------------------
 
 -- Create a movable container frame
-ContainerUI.Frame = CreateFrame("Frame", "MageServicesContainer", UIParent)
+ContainerUI.Frame = CreateFrame("Frame", "MageServiceContainer", UIParent)
 ContainerUI.Frame:SetSize(170, 200) -- Increased height to accommodate buttons
 ContainerUI.Frame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
 ContainerUI.Frame:SetMovable(true)
@@ -37,7 +37,7 @@ ContainerUI.Frame.bg:SetColorTexture(0, 0, 0, 0.5)
 -- Add a header/title for dragging
 ContainerUI.Frame.header = ContainerUI.Frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 ContainerUI.Frame.header:SetPoint("TOP", 0, -5)
-ContainerUI.Frame.header:SetText("MageServices")
+ContainerUI.Frame.header:SetText("MageService")
 
 ------------------------------------------
 -- Button Layout Management
@@ -130,4 +130,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MageServices.ContainerUI = ContainerUI
+MageService.ContainerUI = ContainerUI

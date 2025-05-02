@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Spells Module
 ------------------------------------------
-local MageServices = MAGESERVICES
-local ContainerUI = MageServices.ContainerUI
+local MageService = MAGESERVICE
+local ContainerUI = MageService.ContainerUI
 
 ------------------------------------------
 -- Create the Spells module
@@ -27,7 +27,7 @@ Spells.PortalNames = {
 Spells.Container = ContainerUI.Frame
 
 -- Create a secure action button for casting inside the container
-Spells.CastButton = CreateFrame("Button", "MageServicesCastButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
+Spells.CastButton = CreateFrame("Button", "MageServiceCastButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.CastButton:SetSize(150, 30)
 -- Position will be handled by the ContainerUI layout system
 Spells.CastButton:SetText("Cast Portal")
@@ -96,7 +96,7 @@ function Spells.CastPortal(destination)
     
     -- Add a handler to hide the button after it's clicked
     Spells.CastButton:SetScript("PostClick", function()
-        SendChatMessage("Casting portal to " .. destination .. ". Please click the portal button!", "PARTY")
+        SendChatMessage("Casting port to " .. destination .. ". Please click the portal!", "PARTY")
 
         if Spells.HideTimer then
             Spells.HideTimer:Cancel()
@@ -125,7 +125,7 @@ Spells.ConjureNames = {
 -- Food & Water UI Elements
 ------------------------------------------
 -- Create a secure action button for conjuring inside the container
-Spells.ConjureButton = CreateFrame("Button", "MageServicesConjureButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
+Spells.ConjureButton = CreateFrame("Button", "MageServiceConjureButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.ConjureButton:SetSize(150, 30)
 Spells.ConjureButton:SetText("Conjure")
 
@@ -181,8 +181,8 @@ function Spells.UpdateConjureButton()
     end
     
     -- Count current items
-    local waterCount = Spells.CountItemsInBags(MageServices.Trade.Items.water)
-    local foodCount = Spells.CountItemsInBags(MageServices.Trade.Items.food)
+    local waterCount = Spells.CountItemsInBags(MageService.Trade.Items.water)
+    local foodCount = Spells.CountItemsInBags(MageService.Trade.Items.food)
     
     -- Disable button if we have enough of both
     if waterCount >= waterThreshold and foodCount >= foodThreshold then
@@ -259,4 +259,4 @@ Spells.UpdateConjureButton()
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MageServices.Spells = Spells
+MageService.Spells = Spells

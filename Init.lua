@@ -3,4 +3,4 @@
 ------------------------------------------
 -- This file initializes the addon's global table
 
-MAGESERVICES = {}
+MAGESERVICE = {}

@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Blacklist Module
 ------------------------------------------
-local MageServices = MAGESERVICES
-local ContainerUI = MageServices.ContainerUI
+local MageService = MAGESERVICE
+local ContainerUI = MageService.ContainerUI
 
 ------------------------------------------
 -- Create the Blacklist module
@@ -40,4 +40,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MageServices.Blacklist = Blacklist
+MageService.Blacklist = Blacklist
