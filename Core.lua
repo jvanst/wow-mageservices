@@ -192,6 +192,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
             end
 
             print("Trade with " .. player .. " initiated. Please wait for the trade to be accepted.")
+
+            TradeTimeoutMonitor.Start(player)
     
             -- If player is not buying a port
             if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
