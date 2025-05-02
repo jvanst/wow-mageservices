@@ -69,8 +69,20 @@ end
 
 -- Function to add items to trade window
 function Trade.FillFoodWater()
+    local targetPlayer = UnitName("NPC")
+    local targetLevel = UnitLevel("NPC")
     local targetClass = Trade.GetTargetClass()
     local config
+    
+    -- Check if player meets minimum level requirement
+    if targetLevel < 55 then
+        -- Close trade window
+        CancelTrade()
+        -- Inform player
+        SendChatMessage("Sorry, i'm only handing out level 55 food & water. You can't use it yet", "WHISPER", nil, targetPlayer)
+        print("|cFFFF0000Trade cancelled:|r " .. targetPlayer .. " is only level " .. targetLevel .. " (minimum level: 55)")
+        return
+    end
     
     -- Get configuration based on class or use default
     if targetClass and Trade.ClassConfig[targetClass] then

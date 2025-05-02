@@ -37,7 +37,7 @@ ContainerUI.Frame.bg:SetColorTexture(0, 0, 0, 0.5)
 -- Add a header/title for dragging
 ContainerUI.Frame.header = ContainerUI.Frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 ContainerUI.Frame.header:SetPoint("TOP", 0, -5)
-ContainerUI.Frame.header:SetText("MageServices Actions")
+ContainerUI.Frame.header:SetText("MageServices")
 
 ------------------------------------------
 -- Button Layout Management
