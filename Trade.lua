@@ -249,6 +249,8 @@ function Trade.CreateAcceptTradeButton()
     Trade.AcceptTradeButton:SetScript("OnClick", function()
         AcceptTrade()
         print("|cFF33FF99Trade:|r Accepting trade...")
+        -- Hide the button after accepting
+        Trade.ToggleAcceptTradeButton(false)
     end)
     
     -- Add tooltip
