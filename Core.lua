@@ -85,20 +85,20 @@ local function HandleMessage(message, playerName)
     local isLookingForWaterOrFood = (string.find(lowerMessage, "wtb") or string.find(lowerMessage, "lf")) and
                                     (string.find(lowerMessage, "water") or string.find(lowerMessage, "food"))
 
-    -- if isLookingForPort then
-    --     local foundDestination = Destinations.FindInMessage(message)
+    if isLookingForPort then
+        local foundDestination = Destinations.FindInMessage(message)
 
-    --     if foundDestination then
-    --         print("Found player " .. playerName .. " looking for portal to " .. foundDestination)
-    --         Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
-    --         Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
+        if foundDestination then
+            print("Found player " .. playerName .. " looking for portal to " .. foundDestination)
+            Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
+            Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
 
-    --         InviteUnit(playerName)
-    --         SendChatMessage("Im selling ports to " .. foundDestination .. " for 1g at SW Fountain.", "WHISPER", nil, playerName)
-    --     end
-    -- elseif isLookingForWaterOrFood then
-    --     SendChatMessage("I'm trading mage water and food at SW Fountain", "WHISPER", nil, playerName)
-    -- end
+            InviteUnit(playerName)
+            SendChatMessage("Im selling ports to " .. foundDestination .. " for 1g at SW Fountain.", "WHISPER", nil, playerName)
+        end
+    elseif isLookingForWaterOrFood then
+        SendChatMessage("I'm trading mage water and food at SW Fountain", "WHISPER", nil, playerName)
+    end
 end
 
 ------------------------------------------
