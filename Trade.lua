@@ -1,6 +1,6 @@
-local MyAddOn = MYADDON
-local Destinations = MyAddOn.Destinations
-local Utils = MyAddOn.Utils
+local MageServices = MAGESERVICES
+local Destinations = MageServices.Destinations
+local Utils = MageServices.Utils
 
 ------------------------------------------
 -- Create the Trade module
@@ -232,4 +232,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.Trade = Trade
+MageServices.Trade = Trade

@@ -1,7 +1,7 @@
 ------------------------------------------
 -- Utilities Module
 ------------------------------------------
-local MyAddOn = MYADDON
+local MageServices = MAGESERVICES
 
 ------------------------------------------
 -- Create the Utils module
@@ -22,4 +22,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.Utils = Utils
+MageServices.Utils = Utils

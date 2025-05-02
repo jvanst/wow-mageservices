@@ -1,14 +1,14 @@
 ------------------------------------------
 -- Core Module
 ------------------------------------------
-local MyAddOn = MYADDON
-local Destinations = MyAddOn.Destinations
-local Blacklist = MyAddOn.Blacklist
-local Utils = MyAddOn.Utils
-local Trade = MyAddOn.Trade
-local TradeProximityMonitor = MyAddOn.TradeProximityMonitor
-local TradeTimeoutMonitor = MyAddOn.TradeTimeoutMonitor
-local Spells = MyAddOn.Spells
+local MageServices = MAGESERVICES
+local Destinations = MageServices.Destinations
+local Blacklist = MageServices.Blacklist
+local Utils = MageServices.Utils
+local Trade = MageServices.Trade
+local TradeProximityMonitor = MageServices.TradeProximityMonitor
+local TradeTimeoutMonitor = MageServices.TradeTimeoutMonitor
+local Spells = MageServices.Spells
 
 ------------------------------------------
 -- Addon Configuration
@@ -57,25 +57,25 @@ local function SlashCommandHandler(msg)
     
     if msg == "on" then
         addonEnabled = true
-        print("|cFF33FF99MyAddOn:|r |cFF00FF00Enabled|r - Now monitoring for portal requests")
+        print("|cFF33FF99MageServices:|r |cFF00FF00Enabled|r")
     elseif msg == "off" then
         addonEnabled = false
-        print("|cFF33FF99MyAddOn:|r |cFFFF0000Disabled|r - No longer monitoring for portal requests")
+        print("|cFF33FF99MageServices:|r |cFFFF0000Disabled|r")
     else
         -- Toggle if no specific command
         addonEnabled = not addonEnabled
         if addonEnabled then
-            print("|cFF33FF99MyAddOn:|r |cFF00FF00Enabled|r - Now monitoring for portal requests")
+            print("|cFF33FF99MageServices:|r |cFF00FF00Enabled|r")
         else
-            print("|cFF33FF99MyAddOn:|r |cFFFF0000Disabled|r - No longer monitoring for portal requests")
+            print("|cFF33FF99MageServices:|r |cFFFF0000Disabled|r")
         end
     end
 end
 
 -- Register slash commands
-SLASH_MYADDON1 = "/myaddon"
-SLASH_MYADDON2 = "/ma"
-SlashCmdList["MYADDON"] = SlashCommandHandler
+SLASH_MAGESERVICES1 = "/mageservices"
+SLASH_MAGESERVICES2 = "/ms"
+SlashCmdList["MAGESERVICES"] = SlashCommandHandler
 
 ------------------------------------------
 -- Message Handling Functions
@@ -110,8 +110,8 @@ end
 frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
         local addonName = ...
-        if addonName == "MyAddOn" then
-            print("|cFF33FF99MyAddOn|r has been loaded successfully! Type |cFFFFFF00/myaddon|r or |cFFFFFF00/ma|r to toggle.")
+        if addonName == "MageServices" then
+            print("|cFF33FF99MageServices|r has been loaded successfully! Type |cFFFFFF00/mageservices|r or |cFFFFFF00/ms|r to toggle.")
         end
         return -- Always process ADDON_LOADED regardless of enabled state
     end
@@ -195,7 +195,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
     
             -- If player is not buying a port
             if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
-                Trade.Fill()
+                Trade.FillFoodWater()
             end
         end
 

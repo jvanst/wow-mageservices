@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Spells Module
 ------------------------------------------
-local MyAddOn = MYADDON
-local ContainerUI = MyAddOn.ContainerUI
+local MageServices = MAGESERVICES
+local ContainerUI = MageServices.ContainerUI
 
 ------------------------------------------
 -- Create the Spells module
@@ -27,7 +27,7 @@ Spells.PortalNames = {
 Spells.Container = ContainerUI.Frame
 
 -- Create a secure action button for casting inside the container
-Spells.CastButton = CreateFrame("Button", "MyAddOnPortalButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
+Spells.CastButton = CreateFrame("Button", "MageServicesCastButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.CastButton:SetSize(150, 30)
 Spells.CastButton:SetPoint("BOTTOM", Spells.Container, "BOTTOM", 0, 10)
 Spells.CastButton:Hide()
@@ -113,7 +113,7 @@ Spells.ConjureNames = {
 -- Food & Water UI Elements
 ------------------------------------------
 -- Create a secure action button for conjuring inside the container
-Spells.ConjureButton = CreateFrame("Button", "MyAddOnConjureButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
+Spells.ConjureButton = CreateFrame("Button", "MageServicesConjureButton", Spells.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Spells.ConjureButton:SetSize(150, 30)
 Spells.ConjureButton:SetPoint("BOTTOM", Spells.Container, "BOTTOM", 0, 45) -- Position above the portal button
 Spells.ConjureButton:SetText("Conjure Food/Water")
@@ -166,8 +166,8 @@ function Spells.UpdateConjureButton()
     end
     
     -- Count current items
-    local waterCount = Spells.CountItemsInBags(MyAddOn.Trade.Items.water)
-    local foodCount = Spells.CountItemsInBags(MyAddOn.Trade.Items.food)
+    local waterCount = Spells.CountItemsInBags(MageServices.Trade.Items.water)
+    local foodCount = Spells.CountItemsInBags(MageServices.Trade.Items.food)
     
     -- Hide button if we have enough of both
     if waterCount >= waterThreshold and foodCount >= foodThreshold then
@@ -244,4 +244,4 @@ Spells.UpdateConjureButton()
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.Spells = Spells
+MageServices.Spells = Spells

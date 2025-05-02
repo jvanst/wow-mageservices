@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Advertiser Module
 ------------------------------------------
-local MyAddOn = MYADDON
-local ContainerUI = MyAddOn.ContainerUI
+local MageServices = MAGESERVICES
+local ContainerUI = MageServices.ContainerUI
 
 ------------------------------------------
 -- Create the Advertiser module
@@ -70,7 +70,7 @@ function Advertiser.CreateButton()
     -- Assuming ContainerUI.PortalCasterFrame exists as the portal caster container
     local parentFrame = ContainerUI.PortalCasterFrame or ContainerUI.Frame
     
-    local AdvertiseButton = CreateFrame("Button", "MyAddOnAdvertiseButton", parentFrame, "UIPanelButtonTemplate")
+    local AdvertiseButton = CreateFrame("Button", "MageServicesAdvertiseButton", parentFrame, "UIPanelButtonTemplate")
     AdvertiseButton:SetSize(150, 30)
     
     -- Position at the bottom of the portal caster container
@@ -115,4 +115,4 @@ Advertiser.Init()
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.Advertiser = Advertiser
+MageServices.Advertiser = Advertiser

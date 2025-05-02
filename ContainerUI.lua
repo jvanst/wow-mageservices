@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Container UI Module
 ------------------------------------------
-local MyAddOn = MYADDON
-local Blacklist = MyAddOn.Blacklist
+local MageServices = MAGESERVICES
+local Blacklist = MageServices.Blacklist
 
 ------------------------------------------
 -- Create the ContainerUI module
@@ -14,7 +14,7 @@ local ContainerUI = {}
 ------------------------------------------
 
 -- Create a movable container frame
-ContainerUI.Frame = CreateFrame("Frame", "MyAddOnPortalContainer", UIParent)
+ContainerUI.Frame = CreateFrame("Frame", "MageServicesContainer", UIParent)
 ContainerUI.Frame:SetSize(170, 120)
 ContainerUI.Frame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
 ContainerUI.Frame:SetMovable(true)
@@ -37,7 +37,7 @@ ContainerUI.Frame.bg:SetColorTexture(0, 0, 0, 0.5)
 -- Add a header/title for dragging
 ContainerUI.Frame.header = ContainerUI.Frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 ContainerUI.Frame.header:SetPoint("TOP", 0, -5)
-ContainerUI.Frame.header:SetText("Actions")
+ContainerUI.Frame.header:SetText("MageServices Actions")
 
 ------------------------------------------
 -- UI Functions
@@ -55,7 +55,7 @@ end
 -- Function to add a Kick button to the container
 local function AddKickButton()
     -- Create the Kick button
-    local KickButton = CreateFrame("Button", "MyAddOnKickButton", ContainerUI.Frame, "UIPanelButtonTemplate")
+    local KickButton = CreateFrame("Button", "MageServicesKickButton", ContainerUI.Frame, "UIPanelButtonTemplate")
     KickButton:SetSize(150, 30)
     KickButton:SetPoint("TOP", ContainerUI.Frame, "TOP", 0, -30)
     KickButton:SetText("Kick Player")
@@ -106,4 +106,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.ContainerUI = ContainerUI
+MageServices.ContainerUI = ContainerUI

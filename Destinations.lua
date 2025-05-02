@@ -1,7 +1,7 @@
 ------------------------------------------
 -- Destinations Module
 ------------------------------------------
-local MyAddOn = MYADDON
+local MageServices = MAGESERVICES
 
 ------------------------------------------
 -- Create the Destinations module
@@ -105,4 +105,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.Destinations = Destinations
+MageServices.Destinations = Destinations

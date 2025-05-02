@@ -5,9 +5,9 @@
 -- who do not complete their trades within a specified time limit.
 -- It uses the C_Timer API to create a timer that checks for trade completion.
 
-local MyAddOn = MYADDON
-local Blacklist = MyAddOn.Blacklist
-local Trade = MyAddOn.Trade
+local MageServices = MAGESERVICES
+local Blacklist = MageServices.Blacklist
+local Trade = MageServices.Trade
 
 ------------------------------------------
 -- Create the module
@@ -55,5 +55,5 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.TradeTimeoutMonitor = TradeTimeoutMonitor
+MageServices.TradeTimeoutMonitor = TradeTimeoutMonitor
 

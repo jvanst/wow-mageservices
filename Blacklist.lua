@@ -1,8 +1,8 @@
 ------------------------------------------
 -- Blacklist Module
 ------------------------------------------
-local MyAddOn = MYADDON
-local ContainerUI = MyAddOn.ContainerUI
+local MageServices = MAGESERVICES
+local ContainerUI = MageServices.ContainerUI
 
 ------------------------------------------
 -- Create the Blacklist module
@@ -22,7 +22,7 @@ local blacklistedPlayers = {}
 Blacklist.Container = ContainerUI.Frame
 
 -- Create a secure action button for casting inside the container
-Blacklist.KickButton = CreateFrame("Button", "MyAddOnPortalButton", Blacklist.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
+Blacklist.KickButton = CreateFrame("Button", "MageServicesKickButton", Blacklist.Container, "SecureActionButtonTemplate,UIPanelButtonTemplate")
 Blacklist.KickButton:SetSize(150, 30)
 Blacklist.KickButton:SetPoint("BOTTOM", Blacklist.Container, "BOTTOM", 0, 10)
 Blacklist.KickButton:SetText("Kick Player")
@@ -82,4 +82,4 @@ end
 ------------------------------------------
 -- Register the module in the addon namespace
 ------------------------------------------
-MyAddOn.Blacklist = Blacklist
+MageServices.Blacklist = Blacklist

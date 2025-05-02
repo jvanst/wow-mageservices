@@ -1,6 +1,6 @@
 ## Interface: 11403
-## Title: MyAddOn
-## Notes: Scans chat for 'port' and automates teleportation.
+## Title: MageServices
+## Notes: Automates mage services including portals, food and water trading.
 ## Author: James
 ## Version: 1.0
 
