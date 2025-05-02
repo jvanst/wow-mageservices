@@ -203,7 +203,7 @@ function Trade.ShowTradeSummary(player)
     if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
         print("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t |cFF33FF99Food & Water sale" .. ":|r " .. goldString .. " received for " .. waterCount .. " water and " .. foodCount .. " food")
     else
-        print("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t |cFF33FF99Portal sale:|r " .. goldString .. " received for portal to " .. destination)
+        print("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t |cFF33FF99Portal sale:|r " .. goldString .. " received for port")
     end
 end
 

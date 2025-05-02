@@ -206,31 +206,36 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "TRADE_ACCEPT_UPDATE" then
         local playerAccepted, targetAccepted = ...
         local player = UnitName("NPC")
-        
-        if playerAccepted == 0 and Trade.GetPlayerPortalPurchaseStatus(player) == nil then
-            -- If we haven't accepted a water trade
-            C_Timer.After(1, function()
-                Trade.ToggleAcceptTradeButton(true)
-            end)
-        elseif targetAccepted == 1 and playerAccepted == 0 and Trade.VerifyPortalPurchase(player) then
-            -- If the other player has accepted with the correct amount of gold
-            Trade.ToggleAcceptTradeButton(true)
-        -- Both players have accepted
-        elseif playerAccepted == 1 and targetAccepted == 1 then       
-            -- When both players have accepted the trade     
-            TradeTimeoutMonitor.Stop()
 
-            Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(player), Trade.PURCHASE_STATUS.PAID)
-            
-            -- Show trade summary
-            Trade.ShowTradeSummary(player)
-            
-            -- Cast the portal spell
-            local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
-            if destination then
-                Spells.CastPortal(destination)
-            else
-                print("Error: No destination set for player " .. player)
+        if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
+            -- Not buying a portal
+            if playerAccepted == 0 then
+                C_Timer.After(1, function()
+                    Trade.ToggleAcceptTradeButton(true)
+                end)
+            end
+        else
+            -- Buying portal
+            if targetAccepted == 1 and playerAccepted == 0 and Trade.VerifyPortalPurchase(player) then
+                -- If the other player has accepted with the correct amount of gold
+                Trade.ToggleAcceptTradeButton(true)
+            -- Both players have accepted
+            elseif playerAccepted == 1 and targetAccepted == 1 then       
+                -- When both players have accepted the trade     
+                TradeTimeoutMonitor.Stop()
+    
+                Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(player), Trade.PURCHASE_STATUS.PAID)
+                
+                -- Show trade summary
+                Trade.ShowTradeSummary(player)
+                
+                -- Cast the portal spell
+                local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
+                if destination then
+                    Spells.CastPortal(destination)
+                else
+                    print("Error: No destination set for player " .. player)
+                end
             end
         end
     end
