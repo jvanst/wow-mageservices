@@ -1,17 +1,31 @@
--- This module monitors trade timeouts and handles the logic for blacklisting players who do not complete their trades within a specified time limit.
--- It uses the C_Timer API to create a timer that checks for trade completion every 30 seconds.
+------------------------------------------
+-- Trade Timeout Monitor
+------------------------------------------
+-- This module monitors trade timeouts and handles the logic for blacklisting players 
+-- who do not complete their trades within a specified time limit.
+-- It uses the C_Timer API to create a timer that checks for trade completion.
 
-local MyAddOn = MYADDON
-local Blacklist = MyAddOn.Blacklist
-local Trade = MyAddOn.Trade
+local MageServices = MAGESERVICES
+local Blacklist = MageServices.Blacklist
+local Trade = MageServices.Trade
 
--- Create the Utils module
+------------------------------------------
+-- Create the module
+------------------------------------------
 local TradeTimeoutMonitor = {}
 
+------------------------------------------
+-- Configuration
+------------------------------------------
 -- Trade timeout configuration
 local TRADE_TIMEOUT_SECONDS = 30
 local tradeTimeoutTimer = nil
 
+------------------------------------------
+-- Core Functions
+------------------------------------------
+
+-- Function to start the trade timeout monitoring
 function TradeTimeoutMonitor.Start(player)
     -- Start the trade timeout timer
     if tradeTimeoutTimer then
@@ -30,6 +44,7 @@ function TradeTimeoutMonitor.Start(player)
     end)
 end
 
+-- Function to stop the trade timeout monitoring
 function TradeTimeoutMonitor.Stop()
     if tradeTimeoutTimer then
         tradeTimeoutTimer:Cancel()
@@ -37,6 +52,8 @@ function TradeTimeoutMonitor.Stop()
     end
 end
 
+------------------------------------------
 -- Register the module in the addon namespace
-MyAddOn.TradeTimeoutMonitor = TradeTimeoutMonitor
+------------------------------------------
+MageServices.TradeTimeoutMonitor = TradeTimeoutMonitor
 

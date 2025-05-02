@@ -1,1 +1,6 @@
-MYADDON = {}
+------------------------------------------
+-- Addon Initialization
+------------------------------------------
+-- This file initializes the addon's global table
+
+MAGESERVICES = {}
