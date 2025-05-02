@@ -14,10 +14,12 @@ Automates mage portal selling and consumable trading in World of Warcraft: Class
 - Prints a trade summary
 
 **Buttons**
-- `Accept Trade`: Appears once a trade is accaptable
-- `Cast Portal`: Appears once a player has paid for a port
-- `Conjure`: Appears when the players backpack doesn't have enough water/food
-- `Advertise`: Appears every 60 seconds to send advertisement to local and instance channel
+- `Accept Trade` Appears once a trade is accaptable
+- `Cast Portal` Appears once a player has paid for a port
+- `Conjure` Appears when the players backpack doesn't have enough water/food
+- `Advertise` Appears every 60 seconds to send advertisement to local and instance channel
+
+![Screenshot 2025-05-02 142359](https://github.com/user-attachments/assets/f82609e9-f5e2-4944-b97f-cdc3487ba849)
 
 ## TODO
 
