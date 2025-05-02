@@ -206,8 +206,6 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "TRADE_ACCEPT_UPDATE" then
         local playerAccepted, targetAccepted = ...
         local player = UnitName("NPC")
-
-        print("TRADE_ACCEPT_UPDATE");
         
         if playerAccepted == 0 and Trade.GetPlayerPortalPurchaseStatus(player) == nil then
             -- If we haven't accepted a water trade

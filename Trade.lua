@@ -199,33 +199,11 @@ function Trade.ShowTradeSummary(player)
         goldString = goldString .. silver .. "s "
     end
     goldString = goldString .. copper .. "c"
-    
-    -- Print summary
-    print("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t |cFF33FF99Trade Summary with|r |cFFFFFF00" .. player .. "|r:")
-    
-    if #givenItems > 0 then
-        print("  |cFF00FF00Items given:|r")
-        for _, item in ipairs(givenItems) do
-            print("    - " .. item.quantity .. "x " .. item.name)
-        end
-    end
-    
-    if goldReceived > 0 then
-        print("  |cFFFFD700Received:|r " .. goldString)
-    end
-    
-    if waterCount > 0 or foodCount > 0 then
-        local tradeType = "water/food"
-        print("|cFF33FF99Trade completed:|r " .. waterCount .. " water and " .. foodCount .. " food traded to " .. player)
-    elseif goldReceived >= REQUIRED_GOLD_AMOUNT then
-        local destination = Destinations.GetPlayerDestination(Utils.StripRealm(player))
-        if destination then
-            print("|cFF33FF99Portal sale:|r " .. goldString .. " received for portal to " .. destination)
-        else
-            print("|cFF33FF99Trade completed:|r " .. goldString .. " received")
-        end
+
+    if Trade.GetPlayerPortalPurchaseStatus(player) == nil then
+        print("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t |cFF33FF99Food & Water sale" .. ":|r " .. goldString .. " received for " .. waterCount .. " water and " .. foodCount .. " food")
     else
-        print("|cFF33FF99Trade completed with|r " .. player)
+        print("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t |cFF33FF99Portal sale:|r " .. goldString .. " received for portal to " .. destination)
     end
 end
 
