@@ -46,35 +46,6 @@ frame:RegisterEvent("TRADE_SHOW")
 frame:RegisterEvent("TRADE_TARGET_ITEM_CHANGED")
 
 ------------------------------------------
--- Slash Command Handling
-------------------------------------------
-local function SlashCommandHandler(msg)
-    msg = string.lower(msg or "")
-    
-    if msg == "on" then
-        Settings.SetAddonEnabled(true)
-        print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
-    elseif msg == "off" then
-        Settings.SetAddonEnabled(false)
-        print("|cFF33FF99MageService:|r |cFFFF0000Disabled|r")
-    else
-        -- Toggle if no specific command
-        local addonEnabled = not Settings.IsAddonEnabled()
-        Settings.SetAddonEnabled(addonEnabled)
-        if addonEnabled then
-            print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")
-        else
-            print("|cFF33FF99MageService:|r |cFFFF0000Disabled|r")
-        end
-    end
-end
-
--- Register slash commands
-SLASH_MAGESERVICE1 = "/mageservice"
-SLASH_MAGESERVICE2 = "/ms"
-SlashCmdList["MAGESERVICE"] = SlashCommandHandler
-
-------------------------------------------
 -- Message Handling Functions
 ------------------------------------------
 local function HandleMessage(message, playerName)
@@ -108,8 +79,16 @@ frame:SetScript("OnEvent", function(self, event, ...)
     if event == "ADDON_LOADED" then
         local addonName = ...
         if addonName == "MageService" then
-            print("|cFF33FF99MageService|r has been loaded successfully! Type |cFFFFFF00/mageservices|r or |cFFFFFF00/ms|r to toggle.")
-
+            -- Initialize slash commands
+            if MageService.SlashCommands then
+                MageService.SlashCommands.Initialize()
+            end
+            
+            -- Initialize container UI with saved settings
+            if MageService.ContainerUI then
+                MageService.ContainerUI.Initialize()
+            end
+            
             -- Print the current enabled state
             if Settings.IsAddonEnabled() then
                 print("|cFF33FF99MageService:|r |cFF00FF00Enabled|r")

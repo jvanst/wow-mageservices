@@ -3,6 +3,7 @@
 ------------------------------------------
 local MageService = MAGESERVICE
 local Blacklist = MageService.Blacklist
+local Settings = MageService.Settings
 
 ------------------------------------------
 -- Create the ContainerUI module
@@ -16,7 +17,7 @@ local ContainerUI = {}
 -- Create a movable container frame
 ContainerUI.Frame = CreateFrame("Frame", "MageServiceContainer", UIParent)
 ContainerUI.Frame:SetSize(170, 200) -- Increased height to accommodate buttons
-ContainerUI.Frame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
+-- Initial position will be set during initialization
 ContainerUI.Frame:SetMovable(true)
 ContainerUI.Frame:EnableMouse(true)
 ContainerUI.Frame:SetClampedToScreen(true)
@@ -24,9 +25,14 @@ ContainerUI.Frame:RegisterForDrag("LeftButton")
 ContainerUI.Frame:SetScript("OnDragStart", function(self) self:StartMoving() end)
 ContainerUI.Frame:SetScript("OnDragStop", function(self) 
     self:StopMovingOrSizing()
-    -- Save position for future sessions (optional)
+    -- Save position for future sessions
     local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
-    -- You could save these values to a saved variable table here
+    Settings.SetContainerUIPosition({
+        point = point,
+        relativePoint = relativePoint,
+        xOfs = xOfs,
+        yOfs = yOfs
+    })
 end)
 
 -- Add a background and border to make it visible when empty
@@ -37,7 +43,7 @@ ContainerUI.Frame.bg:SetColorTexture(0, 0, 0, 0.5)
 -- Add a header/title for dragging
 ContainerUI.Frame.header = ContainerUI.Frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 ContainerUI.Frame.header:SetPoint("TOP", 0, -5)
-ContainerUI.Frame.header:SetText("MageService")
+ContainerUI.Frame.header:SetText("Mage Service")
 
 ------------------------------------------
 -- Button Layout Management
@@ -110,33 +116,45 @@ end
 -- Function to toggle container visibility
 function ContainerUI.ToggleVisibility()
     if ContainerUI.Frame:IsShown() then
-        ContainerUI.Frame:Hide()
+        ContainerUI.Hide()
     else
-        ContainerUI.UpdateContainerSize()
-        ContainerUI.Frame:Show()
+        ContainerUI.Show()
     end
 end
 
-------------------------------------------
--- Slash Commands
-------------------------------------------
+-- Function to show container
+function ContainerUI.Show()
+    ContainerUI.UpdateContainerSize()
+    ContainerUI.Frame:Show()
+    Settings.SetContainerUIVisible(true)
+end
 
--- Modify the existing MAGESERVICE slash command to handle UI visibility
-local existingMageServiceHandler = SlashCmdList["MAGESERVICE"]
+-- Function to hide container
+function ContainerUI.Hide()
+    ContainerUI.Frame:Hide()
+    Settings.SetContainerUIVisible(false)
+end
 
-SlashCmdList["MAGESERVICE"] = function(msg)
-    msg = string.lower(msg or "")
+-- Function to initialize the container UI from saved settings
+function ContainerUI.Initialize()
+    -- Set the position from saved settings
+    local position = Settings.GetContainerUIPosition()
+    if position then
+        ContainerUI.Frame:ClearAllPoints()
+        ContainerUI.Frame:SetPoint(
+            position.point, 
+            UIParent, 
+            position.relativePoint, 
+            position.xOfs, 
+            position.yOfs
+        )
+    end
     
-    if msg == "show" then
-        ContainerUI.Frame:Show()
-        ContainerUI.UpdateContainerSize()
-        print("|cFF33FF99MageService:|r UI shown")
-    elseif msg == "hide" then
-        ContainerUI.Frame:Hide()
-        print("|cFF33FF99MageService:|r UI hidden")
+    -- Set visibility from saved settings
+    if Settings.IsContainerUIVisible() then
+        ContainerUI.Show()
     else
-        -- Call the original handler for other commands
-        existingMageServiceHandler(msg)
+        ContainerUI.Hide()
     end
 end
 

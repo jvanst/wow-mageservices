@@ -16,4 +16,5 @@ Trade.lua
 TradeProximityMonitor.lua
 TradeTimeoutMonitor.lua
 Spells.lua
+SlashCommands.lua
 Core.lua

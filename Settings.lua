@@ -10,6 +10,13 @@ MageService.Settings = Settings
 ------------------------------------------
 local defaultSettings = {
     addonEnabled = false,
+    containerUIVisible = true,
+    containerUIPosition = {
+        point = "CENTER",
+        relativePoint = "CENTER",
+        xOfs = 0,
+        yOfs = 100
+    }
 }
 
 -- Table to store the character-specific settings
@@ -103,6 +110,23 @@ end
 -- Toggle the addon enabled state
 function Settings.ToggleAddonEnabled()
     return Settings.ToggleSetting("addonEnabled")
+end
+
+-- Functions for Container UI settings
+function Settings.IsContainerUIVisible()
+    return Settings.GetSetting("containerUIVisible")
+end
+
+function Settings.SetContainerUIVisible(visible)
+    return Settings.SetSetting("containerUIVisible", visible)
+end
+
+function Settings.GetContainerUIPosition()
+    return Settings.GetSetting("containerUIPosition")
+end
+
+function Settings.SetContainerUIPosition(positionTable)
+    return Settings.SetSetting("containerUIPosition", positionTable)
 end
 
 -- Handler for the ADDON_LOADED event
