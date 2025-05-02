@@ -114,19 +114,23 @@ function Trade.FillFoodWater()
             local itemInfo = C_Container.GetContainerItemInfo(bag, slot)
             if itemInfo then
                 local itemName = itemInfo.itemName
+                local stackCount = itemInfo.stackCount
                 
-                -- Check and add water
-                if itemName == Trade.Items.water and waterAdded < config.water then
-                    C_Container.PickupContainerItem(bag, slot)
-                    ClickTradeButton(tradeSlot)
-                    waterAdded = waterAdded + 1
-                    tradeSlot = tradeSlot + 1
-                -- Check and add food
-                elseif itemName == Trade.Items.food and foodAdded < config.food then
-                    C_Container.PickupContainerItem(bag, slot)
-                    ClickTradeButton(tradeSlot)
-                    foodAdded = foodAdded + 1
-                    tradeSlot = tradeSlot + 1
+                -- Only add full stacks (20 items)
+                if stackCount == 20 then
+                    -- Check and add water
+                    if itemName == Trade.Items.water and waterAdded < config.water then
+                        C_Container.PickupContainerItem(bag, slot)
+                        ClickTradeButton(tradeSlot)
+                        waterAdded = waterAdded + 1
+                        tradeSlot = tradeSlot + 1
+                    -- Check and add food
+                    elseif itemName == Trade.Items.food and foodAdded < config.food then
+                        C_Container.PickupContainerItem(bag, slot)
+                        ClickTradeButton(tradeSlot)
+                        foodAdded = foodAdded + 1
+                        tradeSlot = tradeSlot + 1
+                    end
                 end
             end
         end
@@ -134,11 +138,11 @@ function Trade.FillFoodWater()
     
     -- Show warnings only if we couldn't add all requested items
     if waterAdded < config.water then
-        print("Warning: Could only add " .. waterAdded .. " of " .. config.water .. " water stacks")
+        print("Warning: Could only add " .. waterAdded .. " of " .. config.water .. " water stacks. Make sure you have full stacks (20) available.")
     end
     
     if foodAdded < config.food then
-        print("Warning: Could only add " .. foodAdded .. " of " .. config.food .. " food stacks")
+        print("Warning: Could only add " .. foodAdded .. " of " .. config.food .. " food stacks. Make sure you have full stacks (20) available.")
     end
     
     print("Trade: Completed filling trade window - " .. waterAdded .. " water and " .. foodAdded .. " food added")
