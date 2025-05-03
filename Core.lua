@@ -151,6 +151,11 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "CHAT_MSG_WHISPER" then
         local message, playerName = ...
  
+         -- If message is from us, ignore it
+         if playerName == UnitName("player") then
+            return
+        end
+
         if string.lower(message) == "inv" then
             InviteUnit(playerName)
             -- Ask the player where they'd like to port to
