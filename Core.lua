@@ -129,7 +129,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
         local message, playerName = ...
 
         -- If message is from us, ignore it
-        if playerName == UnitName("player") then
+        if Utils.StripRealm(playerName) == UnitName("player") then
             return
         end
         
@@ -143,7 +143,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
             Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
 
             -- If the player doesn't have a pending trade status, set it to pending trade
-            if Trade.GetPlayerPortalPurchaseStatus(playerName) == nil then
+            if Trade.GetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName)) == nil then
                 Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
             end
         end
@@ -151,8 +151,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
     elseif event == "CHAT_MSG_WHISPER" then
         local message, playerName = ...
  
-         -- If message is from us, ignore it
-         if playerName == UnitName("player") then
+        -- If message is from us, ignore it
+        if Utils.StripRealm(playerName) == UnitName("player") then
             return
         end
 
@@ -170,7 +170,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
                 Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
 
                 -- If the player doesn't have a pending trade status, set it to pending trade
-                if Trade.GetPlayerPortalPurchaseStatus(playerName) == nil then
+                if Trade.GetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName)) == nil then
                     Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
                 end
                 
