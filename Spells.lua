@@ -168,6 +168,16 @@ function Spells.UpdateConjureButton()
     local waterThreshold = 700
     local foodThreshold = 300
     
+    -- Check if player is currently casting
+    local isCasting = UnitCastingInfo("player") ~= nil
+    
+    -- Disable button if player is already casting
+    if isCasting then
+        Spells.ConjureButton:Disable()
+        Spells.ConjureButton:SetAlpha(0.5)
+        return
+    end
+    
     -- Check mana percentage
     local currentMana = UnitPower("player", Enum.PowerType.Mana)
     local maxMana = UnitPowerMax("player", Enum.PowerType.Mana)
