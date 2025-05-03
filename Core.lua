@@ -127,6 +127,11 @@ frame:SetScript("OnEvent", function(self, event, ...)
 
     elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
         local message, playerName = ...
+
+        -- If message is from us, ignore it
+        if playerName == UnitName("player") then
+            return
+        end
         
         -- Players seem to respond to the whisper message in party chat, so we need to handle that too
         -- Check if this is a response to our destination question
@@ -158,7 +163,11 @@ frame:SetScript("OnEvent", function(self, event, ...)
             if foundDestination then
                 print("Player " .. playerName .. " wants to port to " .. foundDestination)
                 Destinations.AddPlayerDestination(Utils.StripRealm(playerName), foundDestination)
-                Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
+
+                -- If the player doesn't have a pending trade status, set it to pending trade
+                if Trade.GetPlayerPortalPurchaseStatus(playerName) == nil then
+                    Trade.SetPlayerPortalPurchaseStatus(Utils.StripRealm(playerName), Trade.PURCHASE_STATUS.PENDING_TRADE)
+                end
                 
                 -- If they're not already in the group, invite them
                 if not UnitInParty(playerName) then
