@@ -41,16 +41,61 @@ ContainerUI.RegisterButton(Spells.CastButton, 20)
 -- Create a timer to hide the button after 15 seconds
 Spells.HideTimer = nil
 
+-- Add this variable with other timer variables
+Spells.RecastTimer = nil
+
 ------------------------------------------
 -- Portal Functions
 ------------------------------------------
--- Function to cast a portal spell based on destination
-function Spells.CastPortal(destination)
+-- Function to check if the player can cast a portal spell
+function Spells.CanCastPortal(destination)
     local spellName = Spells.PortalNames[destination]
     
     if not spellName then
         print("Error: No portal spell found for destination: " .. tostring(destination))
         return false
+    end
+    
+    -- Check if the player has the spell learned
+    local hasSpell = IsSpellKnown(spellName)
+    
+    if not hasSpell then
+        print("|cFFFF0000You do not have the spell " .. spellName .. " learned.|r")
+        return false
+    end
+    
+    -- Check if portal spell is on cooldown
+    local start, duration = GetSpellCooldown(spellName)
+    if start > 0 and duration > 0 then
+        local remainingCooldown = math.ceil(start + duration - GetTime())
+        print("|cFFFF0000Portal spell on cooldown!|r Ready in " .. remainingCooldown .. " seconds")
+        return false
+    end
+
+    -- Check if player has enough mana
+    local _, _, _, cost = GetSpellInfo(spellName)
+    local currentMana = UnitPower("player", Enum.PowerType.Mana)
+    if currentMana < cost then        
+        print("|cFFFF9900Not enough mana to cast portal!|r Need " .. cost .. " mana, have " .. currentMana .. ". Waiting for mana...")        
+        return false
+    end
+
+    return true
+end 
+
+-- Function to cast a portal spell based on destination
+function Spells.CastPortal(destination)
+    local spellName = Spells.PortalNames[destination]
+    
+    if not Spells.CanCastPortal(destination) then
+        Spells.RecastTimer = C_Timer.NewTicker(2, function()
+            Spells.RecastTimer:Cancel()
+            Spells.RecastTimer = nil
+            Spells.CastPortal(destination)
+        end)
+    elseif Spells.RecastTimer then
+        Spells.RecastTimer:Cancel()
+        Spells.RecastTimer = nil
     end
     
     -- Set up the secure button to cast the spell
@@ -111,7 +156,6 @@ function Spells.CastPortal(destination)
     
     return true
 end
-
 ------------------------------------------
 -- Food & Water Configuration
 ------------------------------------------
@@ -263,7 +307,6 @@ end)
 ------------------------------------------
 -- Initialization
 ------------------------------------------
--- Initialize the button
 Spells.UpdateConjureButton()
 
 ------------------------------------------

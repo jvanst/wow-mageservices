@@ -65,7 +65,6 @@ MageService uses a modular design with a central namespace (`MAGESERVICE`) that 
 ## TODO
 
 - Detect when party invites fails
-- Ensure port isn't on cd
 - Respond to players asking for specific water/food stack combinations
 - Respond to players asking about portals
 - Add more user-configurable settings (advert messages, water/food configuration, etc)
