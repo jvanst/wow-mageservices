@@ -56,14 +56,6 @@ function Spells.CanCastPortal(destination)
         return false
     end
     
-    -- Check if the player has the spell learned
-    local hasSpell = IsSpellKnown(spellName)
-    
-    if not hasSpell then
-        print("|cFFFF0000You do not have the spell " .. spellName .. " learned.|r")
-        return false
-    end
-    
     -- Check if portal spell is on cooldown
     local start, duration = GetSpellCooldown(spellName)
     if start > 0 and duration > 0 then
