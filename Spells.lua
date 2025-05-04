@@ -133,8 +133,6 @@ function Spells.CastPortal(destination)
     
     -- Add a handler to hide the button after it's clicked
     Spells.CastButton:SetScript("PostClick", function()
-        SendChatMessage("Casting port to " .. destination .. ". Please click the portal!", "PARTY")
-
         if Spells.HideTimer then
             Spells.HideTimer:Cancel()
             Spells.HideTimer = nil
