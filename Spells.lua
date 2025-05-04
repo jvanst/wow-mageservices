@@ -80,7 +80,7 @@ function Spells.CastPortal(destination)
     local spellName = Spells.PortalNames[destination]
     
     if not Spells.CanCastPortal(destination) then
-        Spells.RecastTimer = C_Timer.NewTicker(2, function()
+        Spells.RecastTimer = C_Timer.NewTicker(5, function()
             Spells.RecastTimer:Cancel()
             Spells.RecastTimer = nil
             Spells.CastPortal(destination)
