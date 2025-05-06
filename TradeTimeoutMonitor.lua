@@ -18,7 +18,7 @@ local TradeTimeoutMonitor = {}
 -- Configuration
 ------------------------------------------
 -- Trade timeout configuration
-local TRADE_TIMEOUT_SECONDS = 45
+local TRADE_TIMEOUT_SECONDS = 60
 local tradeTimeoutTimer = nil
 
 ------------------------------------------
